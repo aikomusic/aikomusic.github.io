@@ -7,40 +7,38 @@
     <meta name="description" content="采樂音樂教室位於新莊中榮街，由專業師資打造。提供新莊鋼琴課程、大提琴一對一教學（免帶樂器）、Teacher Irene 幼兒音樂律動，給孩子最豐富的展演舞台。">
     
     <style>
-        /* 童趣輕盈與溫暖木質調色彩配置 (參考真實教室環境) */
+        /* 童趣輕盈與溫暖木質調色彩配置 */
         :root {
             --primary-green: #90CBAA; 
             --light-green: #E8F5EE;
             --warm-wood: #D4A373; 
-            --bg-cream: #FDFBF7; /* 更溫暖柔和的奶油白，提升對比 */
+            --bg-cream: #FDFBF7; 
             --text-main: #5C4D43; 
             --text-light: #8C7B70;
         }
 
-        /* 預留給您生成的背景圖：增加畫面層次感 */
+        /* 背景圖設定：確保無縫圖案完美呈現 */
         body, html {
             margin: 0; padding: 0; font-family: 'Nunito', 'Noto Sans TC', sans-serif;
             background-color: var(--bg-cream); 
-            /* 👇 已經為您解除註解封印，背景圖會成功顯示 👇 */
             background-image: url('images/xinzhuang-music-bg-pattern.webp'); 
-            background-size: 400px; /* 讓背景圖案重複拼接 */
-            background-blend-mode: multiply; /* 讓底圖和底色柔和融合 */
+            background-size: 400px; 
+            background-blend-mode: multiply; 
             color: var(--text-main); scroll-behavior: smooth;
         }
         a { text-decoration: none; color: inherit; }
 
-        /* 🪟 毛玻璃 (Glassmorphism) 導覽列 */
+        /* 🪟 毛玻璃導覽列 */
         header {
-            background-color: rgba(255, 255, 255, 0.75); /* 半透明白色 */
-            backdrop-filter: blur(12px); /* 模糊背景，產生玻璃感 */
-            -webkit-backdrop-filter: blur(12px); /* 支援蘋果瀏覽器 */
+            background-color: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             padding: 10px 5%; display: flex;
             justify-content: space-between; align-items: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04); 
             position: sticky; top: 0; z-index: 100;
         }
-        /* 放大 Logo */
         .logo img { height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); } 
         
         .piano-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
@@ -55,8 +53,18 @@
             transform: translateY(4px); color: #2d734b;
         }
 
-        /* 首頁主視覺 */
-        .hero { position: relative; width: 100%; height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #333; }
+        /* 🌊 首頁主視覺 (使用 CSS Mask 技術將底部剪裁成波浪，完美透出背景) */
+        .hero { 
+            position: relative; width: 100%; height: 85vh; 
+            display: flex; align-items: center; justify-content: center; background-color: #333; 
+            /* 進階剪裁語法：直接把大區塊底邊剪成波浪，不再產生突兀色塊 */
+            -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,80 C900,130 300,30 0,80 Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-size: 100% 100%;
+            -webkit-mask-repeat: no-repeat;
+            mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,80 C900,130 300,30 0,80 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% 100%;
+            mask-repeat: no-repeat;
+        }
         .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)); z-index: 2; }
         .hero-content { position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); padding: 0 20px; }
@@ -69,27 +77,16 @@
         }
         .btn-cute:hover { background-color: #7ab895; transform: scale(1.05); }
 
-        /* 🌊 音樂波浪 SVG 裝飾 (接在主視覺最下方) */
-        .custom-shape-divider-bottom {
-            position: absolute; bottom: -1px; left: 0; width: 100%; overflow: hidden; line-height: 0; z-index: 4;
-        }
-        .custom-shape-divider-bottom svg {
-            position: relative; display: block; width: calc(100% + 1.3px); height: 70px;
-        }
-        .custom-shape-divider-bottom .shape-fill {
-            fill: var(--bg-cream); /* 這個顏色與底下內容區的背景色融為一體 */
-        }
-
         /* 共用區塊設定 */
-        .section-box { padding: 80px 10%; position: relative; z-index: 5; }
+        .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -30px; } /* 往上縮排讓波浪更緊湊 */
         .sec-title { text-align: center; font-size: 2.5rem; color: var(--primary-green); margin-bottom: 10px; }
         .sec-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem; }
 
-        /* 特色區塊 (加強對比與陰影) */
+        /* 特色區塊 */
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .feature-card {
             background: rgba(255, 255, 255, 0.95); padding: 40px 25px; border-radius: 30px; text-align: center;
-            box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12); /* 更溫暖立體的陰影 */
+            box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12); 
             border: 1px solid rgba(144, 203, 170, 0.3);
             transition: 0.3s; backdrop-filter: blur(5px);
         }
@@ -106,24 +103,20 @@
         .content-img { flex: 1; min-width: 300px; text-align: center; }
         .content-img img { width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* 童趣頁尾 (含地圖三欄式) */
+        /* 童趣頁尾 */
         footer {
             background-color: var(--light-green); 
-            /* 👇 已經為您解除註解封印，頁尾背景圖會成功顯示 👇 */
             background-image: url('images/xinzhuang-footer-bg.webp'); 
             background-size: cover; background-blend-mode: soft-light;
             padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;
             border-top: 5px dashed var(--primary-green);
         }
         .footer-info h3 { color: var(--primary-green); font-size: 1.5rem; display: flex; align-items: center; }
-        /* 頁尾的去背 Logo */
         .footer-logo { height: 45px; margin-right: 12px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
-        
-        /* 地圖容器 */
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 懸浮 LINE 修正路徑 */
+        /* 懸浮 LINE */
         .floating-line { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 65px; height: 65px; transition: transform 0.3s; }
         .floating-line:hover { transform: scale(1.15) rotate(5deg); }
         .floating-line img { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
@@ -135,7 +128,6 @@
             .logo img { height: 75px; }
             .piano-menu { width: 100%; padding-bottom: 10px; }
             .content-split { padding: 25px; }
-            .custom-shape-divider-bottom svg { height: 40px; }
         }
     </style>
 </head>
@@ -144,7 +136,6 @@
     <!-- 毛玻璃鋼琴鍵導覽列 -->
     <header>
         <div class="logo">
-            <!-- 已經為您放大 Logo 尺寸 -->
             <img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室">
         </div>
         <nav class="piano-menu">
@@ -156,7 +147,7 @@
         </nav>
     </header>
 
-    <!-- 主視覺區 -->
+    <!-- 主視覺區 (已經升級為 Mask 裁切) -->
     <section id="hero" class="hero">
         <video class="hero-video" autoplay loop muted playsinline poster="images/xinzhuang-cello-piano-lessons-hero.webp">
             <source src="" type="video/mp4">
@@ -167,13 +158,7 @@
             <p>新莊在地質感音樂空間・成人與幼兒的藝術啟蒙</p>
             <a href="#courses" class="btn-cute">探索課程 🎵</a>
         </div>
-        
-        <!-- 🌊 SVG 音樂波浪裁切 (取代生硬的直線) -->
-        <div class="custom-shape-divider-bottom">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C79.86,118.82,159.22,109.9,229.4,91A787.52,787.52,0,0,0,321.39,56.44Z" class="shape-fill"></path>
-            </svg>
-        </div>
+        <!-- 💡 波浪 SVG 代碼已徹底移除，改用 CSS Mask 控制 -->
     </section>
 
     <!-- 為什麼選擇采樂 -->
@@ -257,14 +242,12 @@
 
     <!-- 懸浮 LINE -->
     <a href="⚫您的LINE連結⚫" class="floating-line" target="_blank" title="預約采樂課程">
-        <!-- 修正 LINE 圖示路徑 -->
         <img src="images/line.png" alt="加入采樂官方LINE">
     </a>
 
-    <!-- 溫暖頁尾 (三欄式：資訊 / 地圖 / 社群) -->
+    <!-- 溫暖頁尾 -->
     <footer id="contact">
         <div class="footer-info">
-            <!-- 加上去背 Logo 呼應 -->
             <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo"> 采樂音樂教室</h3>
             <p>📍 新北市新莊區中榮街56巷2號2樓</p>
             <p>☎ (02) 2996-7912</p>
@@ -273,7 +256,7 @@
         
         <!-- 嵌入 Google 地圖 -->
         <div class="footer-map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
         </div>
 
         <div class="footer-info">
