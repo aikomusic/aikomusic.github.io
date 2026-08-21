@@ -76,8 +76,9 @@
             mask-position: top, bottom;
             mask-repeat: no-repeat;
         }
-        /* ✅ 修正 1 & 2：拿掉黑色遮罩 background: none; 並將圖片對齊點改為 bottom 露出大提琴下半部 */
-        .page-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: 1; }
+
+        /* ✅ 修正：避開波浪遮罩，將圖片往上提一點點 (從 bottom 改為 65%) */
+        .page-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 65%; z-index: 1; }
         .page-hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: none; z-index: 2; }
         
         .page-hero-content { position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); padding: 0 20px; }
@@ -120,10 +121,13 @@
             margin-top: 15px; font-size: 1.05rem; color: var(--text-main); text-align: center; font-weight: bold;
         }
 
-        /* ✅ 修正 3：童趣頁尾 (移除會吃掉圖片的 soft-light) */
+        /* ✅ 修正：分拆 background 語法，防止互相覆蓋吃掉底圖 */
         footer {
-            background-color: var(--light-green); 
-            background: url('images/xinzhuang-footer-bg.webp') center center / cover no-repeat;
+            background-color: var(--light-green);
+            background-image: url('images/xinzhuang-footer-bg.webp');
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
             padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;
             border-top: 5px dashed var(--primary-green);
         }
@@ -189,18 +193,15 @@
         <!-- 🎬 臉書影片網格 -->
         <div class="video-grid">
             
-            <!-- ✅ 修正 4：臉書影片 src 預留。請手動取得完整的 Facebook Embed iframe src 並貼在下方 -->
-            
             <!-- 影片 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <!-- ⚠️ 請將取得的電腦版嵌入碼 src 貼在下方 src="" 的引號內 -->
                     <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1924208791436527%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
 
-            <!-- 影片 2 -->
+            <!-- 影片 2 (語法正確，若無法播是臉書隱私限制，您日後可直接替換 src 網址) -->
             <div class="video-card">
                 <div class="video-wrapper">
                     <iframe src="https://www.facebook.com/plugins/video.php?height=353&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F931780035721322%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
@@ -216,10 +217,10 @@
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
 
-            <!-- 影片 4 -->
+            <!-- ✅ 修正 4：已解除巢狀 (套疊) 的 iframe 錯誤語法 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="<iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F740136084645775%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F740136084645775%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
@@ -248,7 +249,7 @@
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
 
-            <!-- 影片 8 -->
+            <!-- 影片 8 (您自行新增的完美版本) -->
             <div class="video-card">
                 <div class="video-wrapper">
                     <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1046803402919695%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
