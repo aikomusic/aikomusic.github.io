@@ -63,7 +63,12 @@
             mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,108 C900,118 600,100 300,110 C160,116 70,112 0,108 Z' fill='black'/%3E%3C/svg%3E");
             mask-size: 100% 100%; mask-repeat: no-repeat;
         }
-        .page-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .page-hero-img { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    object-fit: cover; 
+    object-position: center 20%; /* 💡 讓圖片重心偏上方，避免切到頭 */
+    z-index: 1; 
+}
         .page-hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6)); z-index: 2; }
         .page-hero-content { position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); padding: 0 20px; }
         .page-hero-content h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: 2px; font-weight: 900; }
