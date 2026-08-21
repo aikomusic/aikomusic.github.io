@@ -6,6 +6,12 @@
     <title>采樂音樂教室 Aiko Music | 新莊大提琴課程、新莊鋼琴、音樂升學檢定</title>
     <meta name="description" content="采樂音樂教室位於新莊中榮街，由專業師資打造。提供新莊鋼琴課程、大提琴一對一教學（免帶樂器）、音樂檢定考試與升學輔導，給孩子最豐富的展演舞台。">
     
+    <!-- 🚀 載入 Google TensorFlow.js 邊緣運算模型 (免費、不耗 API 額度) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+
     <style>
         /* 童趣輕盈與溫暖木質調色彩配置 */
         :root {
@@ -34,20 +40,14 @@
             scrollbar-color: var(--primary-green) var(--light-green);
             scrollbar-width: auto;
         }
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--light-green);
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--light-green); }
         ::-webkit-scrollbar-thumb {
             background: var(--primary-green);
             border-radius: 10px;
             border: 3px solid var(--light-green);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #7AB895;
-        }
+        ::-webkit-scrollbar-thumb:hover { background: #7AB895; }
 
         /* 🪟 毛玻璃導覽列 */
         header {
@@ -78,7 +78,6 @@
         .hero { 
             position: relative; width: 100%; height: 85vh; 
             display: flex; align-items: center; justify-content: center; background-color: #333; 
-            /* 電腦版的明顯波浪弧度 */
             -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,108 C900,118 600,100 300,110 C160,116 70,112 0,108 Z' fill='black'/%3E%3C/svg%3E");
             -webkit-mask-size: 100% 100%;
             -webkit-mask-repeat: no-repeat;
@@ -124,24 +123,22 @@
         .content-img { flex: 1; min-width: 300px; text-align: center; }
         .content-img img { width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* ✨ AI 懸浮按鈕與對話框 (優化老師圖片顯示) */
+        /* ✨ AI 懸浮按鈕與全新整合對話框 (雲朵羊面板風格) */
         .ai-floating-btn {
             position: fixed; bottom: 30px; right: 30px; z-index: 999;
             width: 65px; height: 65px; background: var(--primary-green);
             border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.3s; border: 2px solid white;
-            overflow: hidden; /* 確保圖片不超出圓角 */
+            overflow: hidden;
         }
-        .ai-floating-btn img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        .ai-floating-btn img { width: 100%; height: 100%; object-fit: cover; }
         .ai-floating-btn:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(144, 203, 170, 0.6); }
         
         .ai-chat-box {
             position: fixed; bottom: 110px; right: 30px; z-index: 1000;
-            width: 350px; height: 450px; background: white;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 360px; height: 500px; background: white;
+            border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             display: none; flex-direction: column; overflow: hidden;
             border: 1px solid var(--light-green);
         }
@@ -150,13 +147,27 @@
             font-weight: bold; text-align: center; display: flex; justify-content: space-between;
         }
         .close-chat { cursor: pointer; font-size: 1.2rem; }
+
+        /* 🚀 整合功能面板區塊 (懶洋洋風格按鈕) */
+        .ai-feature-panel {
+            display: flex; flex-direction: column; gap: 8px; padding: 15px;
+            background: var(--bg-cream); border-bottom: 1px solid #eee;
+        }
+        .feature-chip {
+            background: var(--warm-wood); color: white; border: none; padding: 10px 15px;
+            border-radius: 30px; font-size: 0.95rem; font-weight: bold; cursor: pointer;
+            transition: 0.2s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
+        }
+        .feature-chip:hover { background: #b88a5d; transform: translateY(-2px); }
+        .feature-chip.disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+
         .ai-chat-messages {
-            flex: 1; padding: 15px; overflow-y: auto; background: var(--bg-cream);
+            flex: 1; padding: 15px; overflow-y: auto; background: white;
             display: flex; flex-direction: column; gap: 10px; font-size: 1rem;
         }
         .chat-msg { padding: 12px 15px; border-radius: 15px; max-width: 80%; line-height: 1.5; word-break: break-word; }
         .msg-user { background: var(--light-green); color: var(--text-main); align-self: flex-end; border-bottom-right-radius: 5px; }
-        .msg-ai { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #eee; }
+        .msg-ai { background: var(--bg-cream); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #eee; }
         
         .ai-chat-input { display: flex; padding: 10px; border-top: 1px solid #eee; background: white; }
         .ai-chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; }
@@ -164,7 +175,20 @@
             background: var(--warm-wood); color: white; border: none; padding: 0 20px;
             margin-left: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
-        .ai-chat-input button:hover { background: #b88a5d; }
+
+        /* 📷 視覺 AI 專屬彈出視窗 (自動適應最佳大小) */
+        .ai-vision-modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10001; background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; flex-direction: column;
+            align-items: center; width: 90vw; max-width: 640px; border: 4px solid var(--primary-green);
+        }
+        .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
+        .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
+        .camera-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 4/3; }
+        #poseVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #poseCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+        .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
 
         /* 溫暖頁尾 */
         footer {
@@ -178,28 +202,25 @@
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 手機版優化：專屬防海嘯變形波浪與對話框調整 */
+        /* 手機版優化 */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.2rem; }
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
             .logo img { height: 75px; }
             .piano-menu { width: 100%; padding-bottom: 10px; }
             .content-split { padding: 25px; }
-            
-            /* 手機版專屬波浪比例，不會被過度拉長 */
             .hero {
                 -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
                 mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
             }
-            
-            /* 讓手機版對話框不要超出螢幕 */
             .ai-chat-box { width: 90vw; right: 5vw; }
+            .feature-chip { font-size: 0.85rem; padding: 10px; }
         }
     </style>
 </head>
 <body>
 
-<!-- 毛玻璃鋼琴鍵導覽列 -->
+    <!-- 毛玻璃鋼琴鍵導覽列 -->
     <header>
         <div class="logo">
             <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室"></a>
@@ -254,7 +275,6 @@
         <h2 class="sec-title">專業師資與特色課程</h2>
         <p class="sec-subtitle">超過十年教學經驗，帶領孩子愛上音樂</p>
 
-        <!-- Teacher Irene 介紹 -->
         <div class="content-split">
             <div class="content-text">
                 <h3>👑 Teacher Irene (鋼琴教學)</h3>
@@ -271,7 +291,6 @@
             </div>
         </div>
 
-        <!-- 升學考與音樂檢定輔導 -->
         <div id="courses" class="content-split">
             <div class="content-text">
                 <h3>🏆 音樂升學與檢定輔導</h3>
@@ -287,7 +306,6 @@
             </div>
         </div>
         
-        <!-- 器樂個別課 -->
         <div class="content-split">
             <div class="content-text">
                 <h3>🎻 專業器樂一對一教學</h3>
@@ -304,7 +322,7 @@
         </div>
     </section>
 
-    <!-- ✨ AI 網頁練琴輔助工具 (替換為老師圖示) -->
+    <!-- ✨ AI 網頁練琴輔助工具 (包含整合面板) -->
     <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
         <img src="images/ai-teacher.png" alt="AI 音樂老師">
     </div>
@@ -314,13 +332,35 @@
             <span>✨ 采樂 AI 音樂顧問</span>
             <span class="close-chat" id="closeAiChat">✖</span>
         </div>
+        
+        <!-- 🚀 整合功能面板 (懶洋洋風格，預留了後續兩個黑科技的按鈕) -->
+        <div class="ai-feature-panel">
+            <button class="feature-chip" id="startVisionBtn">📷 啟動 AI 琴姿與骨架分析</button>
+            <button class="feature-chip disabled">🎼 拍譜轉伴奏 (建置中)</button>
+            <button class="feature-chip disabled">🎻 動態合奏 (建置中)</button>
+        </div>
+
         <div class="ai-chat-messages" id="chatMessages">
-            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。無論是想做「適性測驗」還是有「練琴痛點」，都可以直接問我喔！</div>
+            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以點擊上方按鈕喚醒黑科技，或是直接輸入問題問我喔！</div>
         </div>
         <div class="ai-chat-input">
             <input type="text" id="chatInput" placeholder="請輸入問題，例如：大提琴怎麼調音？">
             <button id="sendChat">發送</button>
         </div>
+    </div>
+
+    <!-- 📷 視覺 AI 專屬彈出視窗 (適當大小、乾淨俐落) -->
+    <div class="ai-vision-modal" id="visionModal">
+        <div class="vision-header">
+            <span>📷 AI 琴姿骨架捕捉系統</span>
+            <span class="vision-close" id="closeVisionModal">×</span>
+        </div>
+        <div class="camera-box">
+            <div class="loading-text" id="visionLoading">模型載入中，請允許鏡頭權限...</div>
+            <video id="poseVideo" autoplay playsinline muted></video>
+            <canvas id="poseCanvas"></canvas>
+        </div>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將設備放穩並站於鏡頭前。系統將運用您的瀏覽器晶片即時分析彈奏姿態（此功能不消耗網路流量與 API 額度）。</p>
     </div>
 
     <!-- 溫暖頁尾 -->
@@ -331,12 +371,9 @@
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
         </div>
-        
-        <!-- 嵌入 Google 地圖 -->
         <div class="footer-map">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
         </div>
-
         <div class="footer-info">
             <h3 style="margin-bottom: 20px;">追蹤我們的日常</h3>
             <p><a href="https://www.facebook.com/aikomusic2" target="_blank" style="font-weight: bold; color: #2d734b;">👉 Facebook 粉絲專頁</a></p>
@@ -344,8 +381,11 @@
         </div>
     </footer>
 
-    <!-- AI 聊天室運作腳本 (已修復覆蓋 Bug) -->
+    <!-- AI 聊天室運作腳本與 TensorFlow 視覺模型 -->
     <script>
+        // ==========================================
+        // 1. AI 客服對話邏輯 (含防吃文字修復)
+        // ==========================================
         const aiBtn = document.getElementById('aiBtn');
         const aiChatBox = document.getElementById('aiChatBox');
         const closeAiChat = document.getElementById('closeAiChat');
@@ -361,21 +401,15 @@
         
         closeAiChat.addEventListener('click', () => {
             aiChatBox.style.display = 'none';
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
+            if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         });
 
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
 
-            // 顯示使用者訊息
             appendMessage(message, 'msg-user');
             chatInput.value = '';
-
-            // 顯示思考中並取得專屬 ID
             const loadingId = appendMessage('老師思考中...', 'msg-ai');
 
             try {
@@ -386,18 +420,13 @@
                 });
                 const data = await response.json();
                 
-                // 替換正確 ID 的文字
                 document.getElementById(loadingId).innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
                 
-                if (currentAudio) {
-                    currentAudio.pause();
-                }
-                
+                if (currentAudio) { currentAudio.pause(); }
                 if (data.audio) {
                     currentAudio = new Audio("data:audio/mp3;base64," + data.audio);
                     currentAudio.play();
                 }
-                
             } catch (error) {
                 document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。';
             }
@@ -412,13 +441,108 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = `chat-msg ${className}`;
             msgDiv.innerText = text;
-            // 加入隨機亂數，保證 ID 絕對不會重複碰撞！
             const uniqueRandomId = Math.floor(Math.random() * 100000);
             const id = 'msg-' + Date.now() + '-' + uniqueRandomId;
             msgDiv.id = id;
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             return id;
+        }
+
+        // ==========================================
+        // 2. 核心黑科技：AI 鏡頭琴姿骨架捕捉 (彈出視窗版)
+        // ==========================================
+        const startVisionBtn = document.getElementById('startVisionBtn');
+        const visionModal = document.getElementById('visionModal');
+        const closeVisionModal = document.getElementById('closeVisionModal');
+        const pVideo = document.getElementById('poseVideo');
+        const pCanvas = document.getElementById('poseCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        const vLoading = document.getElementById('visionLoading');
+        
+        let poseDetector = null;
+        let poseRunning = false;
+
+        startVisionBtn.addEventListener('click', async () => {
+            aiChatBox.style.display = 'none'; // 隱藏聊天面板，專心看鏡頭
+            visionModal.style.display = 'flex'; // 顯示鏡頭視窗
+            vLoading.style.display = 'block';
+            
+            try {
+                // 取得視訊串流
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                pVideo.srcObject = stream;
+                
+                // 等待影片讀取完成
+                pVideo.onloadedmetadata = async () => {
+                    pCanvas.width = pVideo.videoWidth;
+                    pCanvas.height = pVideo.videoHeight;
+                    vLoading.style.display = 'none';
+                    
+                    // 載入最輕巧快速的 MoveNet 模型
+                    if (!poseDetector) {
+                        const config = { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING };
+                        poseDetector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, config);
+                    }
+                    poseRunning = true;
+                    runPoseDetection();
+                };
+            } catch (err) {
+                vLoading.innerText = '無法存取鏡頭，請檢查您的瀏覽器權限設定。';
+            }
+        });
+
+        closeVisionModal.addEventListener('click', () => {
+            visionModal.style.display = 'none';
+            poseRunning = false;
+            // 關閉鏡頭權限
+            if (pVideo.srcObject) {
+                pVideo.srcObject.getTracks().forEach(track => track.stop());
+            }
+            // 恢復顯示聊天室
+            aiChatBox.style.display = 'flex'; 
+            appendMessage("鏡頭已關閉！剛才有看到追蹤您的黃色關節點與骨架嗎？", "msg-ai");
+        });
+
+        async function runPoseDetection() {
+            if (!poseRunning) return;
+            
+            const poses = await poseDetector.estimatePoses(pVideo);
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            
+            if (poses.length > 0) {
+                const kp = poses[0].keypoints;
+                
+                // 畫骨架連線 (薄荷綠)
+                pCtx.lineWidth = 4;
+                pCtx.strokeStyle = "#90CBAA";
+                const edges = [[5,7],[7,9],[6,8],[8,10],[5,6],[5,11],[6,12],[11,12],[11,13],[13,15],[12,14],[14,16]];
+                edges.forEach(e => {
+                    const p1 = kp[e[0]];
+                    const p2 = kp[e[1]];
+                    if (p1.score > 0.3 && p2.score > 0.3) {
+                        pCtx.beginPath();
+                        pCtx.moveTo(p1.x, p1.y);
+                        pCtx.lineTo(p2.x, p2.y);
+                        pCtx.stroke();
+                    }
+                });
+                
+                // 畫關節點 (木質黃)
+                kp.forEach(point => {
+                    if (point.score > 0.3) {
+                        pCtx.beginPath();
+                        pCtx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                        pCtx.fillStyle = "#D4A373";
+                        pCtx.fill();
+                        pCtx.strokeStyle = "white";
+                        pCtx.lineWidth = 2;
+                        pCtx.stroke();
+                    }
+                });
+            }
+            
+            requestAnimationFrame(runPoseDetection);
         }
     </script>
 </body>
