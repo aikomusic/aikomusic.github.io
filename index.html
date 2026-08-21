@@ -136,12 +136,46 @@
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 懸浮 LINE */
-        .floating-line { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 65px; height: 65px; transition: transform 0.3s; }
-        .floating-line:hover { transform: scale(1.15) rotate(5deg); }
-        .floating-line img { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        /* ✨ AI 懸浮按鈕與對話框 */
+        .ai-floating-btn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            width: 65px; height: 65px; background: var(--primary-green);
+            border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 30px; cursor: pointer; transition: 0.3s;
+            border: 2px solid white;
+        }
+        .ai-floating-btn:hover { transform: scale(1.1); background: #7ab895; }
+        
+        .ai-chat-box {
+            position: fixed; bottom: 110px; right: 30px; z-index: 1000;
+            width: 350px; height: 450px; background: white;
+            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: none; flex-direction: column; overflow: hidden;
+            border: 1px solid var(--light-green);
+        }
+        .ai-chat-header {
+            background: var(--primary-green); color: white; padding: 15px;
+            font-weight: bold; text-align: center; display: flex; justify-content: space-between;
+        }
+        .close-chat { cursor: pointer; font-size: 1.2rem; }
+        .ai-chat-messages {
+            flex: 1; padding: 15px; overflow-y: auto; background: var(--bg-cream);
+            display: flex; flex-direction: column; gap: 10px; font-size: 1rem;
+        }
+        .chat-msg { padding: 12px 15px; border-radius: 15px; max-width: 80%; line-height: 1.5; }
+        .msg-user { background: var(--light-green); color: var(--text-main); align-self: flex-end; border-bottom-right-radius: 5px; }
+        .msg-ai { background: white; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #eee; }
+        
+        .ai-chat-input { display: flex; padding: 10px; border-top: 1px solid #eee; background: white; }
+        .ai-chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; }
+        .ai-chat-input button {
+            background: var(--warm-wood); color: white; border: none; padding: 0 20px;
+            margin-left: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s;
+        }
+        .ai-chat-input button:hover { background: #b88a5d; }
 
-        /* 手機版優化：專屬防海嘯變形波浪 */
+        /* 手機版優化：專屬防海嘯變形波浪與對話框調整 */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.2rem; }
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
@@ -154,6 +188,9 @@
                 -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
                 mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
             }
+            
+            /* 讓手機版對話框不要超出螢幕 */
+            .ai-chat-box { width: 90vw; right: 5vw; }
         }
     </style>
 </head>
@@ -264,10 +301,22 @@
         </div>
     </section>
 
-    <!-- 懸浮 LINE -->
-    <a href="⚫您的LINE連結⚫" class="floating-line" target="_blank" title="預約采樂課程">
-        <img src="images/line.png" alt="加入采樂官方LINE">
-    </a>
+    <!-- ✨ AI 網頁練琴輔助工具 -->
+    <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">🎵</div>
+    
+    <div class="ai-chat-box" id="aiChatBox">
+        <div class="ai-chat-header">
+            <span>✨ 采樂 AI 音樂顧問</span>
+            <span class="close-chat" id="closeAiChat">✖</span>
+        </div>
+        <div class="ai-chat-messages" id="chatMessages">
+            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。無論是想做「適性測驗」還是有「練琴痛點」，都可以直接問我喔！</div>
+        </div>
+        <div class="ai-chat-input">
+            <input type="text" id="chatInput" placeholder="請輸入問題，例如：大提琴怎麼調音？">
+            <button id="sendChat">發送</button>
+        </div>
+    </div>
 
     <!-- 溫暖頁尾 -->
     <footer id="contact">
@@ -290,5 +339,67 @@
         </div>
     </footer>
 
+    <!-- AI 聊天室運作腳本 -->
+    <script>
+        const aiBtn = document.getElementById('aiBtn');
+        const aiChatBox = document.getElementById('aiChatBox');
+        const closeAiChat = document.getElementById('closeAiChat');
+        const sendChat = document.getElementById('sendChat');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // 開關對話框
+        aiBtn.addEventListener('click', () => {
+            aiChatBox.style.display = aiChatBox.style.display === 'flex' ? 'none' : 'flex';
+        });
+        closeAiChat.addEventListener('click', () => {
+            aiChatBox.style.display = 'none';
+        });
+
+        // 處理發送訊息
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // 1. 顯示使用者輸入的訊息
+            appendMessage(message, 'msg-user');
+            chatInput.value = '';
+
+            // 2. 顯示 AI 思考中的佔位訊息
+            const loadingId = appendMessage('AI 思考中...', 'msg-ai');
+
+            try {
+                // 3. 呼叫您在 onlovebox 建立的 API 橋樑
+                const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
+                
+                // 4. 收到回覆後，替換掉思考中的文字
+                document.getElementById(loadingId).innerText = data.reply || '抱歉，系統似乎有點遲鈍，請稍後再試。';
+            } catch (error) {
+                document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。';
+            }
+        }
+
+        sendChat.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // 產生訊息氣泡的輔助函數
+        function appendMessage(text, className) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-msg ${className}`;
+            msgDiv.innerText = text;
+            const id = 'msg-' + Date.now();
+            msgDiv.id = id;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 自動捲動到底部
+            return id;
+        }
+    </script>
 </body>
 </html>
