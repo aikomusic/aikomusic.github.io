@@ -341,35 +341,39 @@
 
     <!-- AI 聊天室運作腳本 -->
     <script>
-        const aiBtn = document.getElementById('aiBtn');
+const aiBtn = document.getElementById('aiBtn');
         const aiChatBox = document.getElementById('aiChatBox');
         const closeAiChat = document.getElementById('closeAiChat');
         const sendChat = document.getElementById('sendChat');
         const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
 
-        // 開關對話框
+        // 宣告一個全域變數來控制音檔
+        let currentAudio = null;
+
         aiBtn.addEventListener('click', () => {
             aiChatBox.style.display = aiChatBox.style.display === 'flex' ? 'none' : 'flex';
         });
+        
         closeAiChat.addEventListener('click', () => {
             aiChatBox.style.display = 'none';
+            // 關閉視窗時停止播放語音
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
         });
 
-        // 處理發送訊息
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
 
-            // 1. 顯示使用者輸入的訊息
             appendMessage(message, 'msg-user');
             chatInput.value = '';
 
-            // 2. 顯示 AI 思考中的佔位訊息
-            const loadingId = appendMessage('AI 思考中...', 'msg-ai');
+            const loadingId = appendMessage('老師思考中...', 'msg-ai');
 
             try {
-                // 3. 呼叫您在 onlovebox 建立的 API 橋樑
                 const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -377,8 +381,20 @@
                 });
                 const data = await response.json();
                 
-                // 4. 收到回覆後，替換掉思考中的文字
-                document.getElementById(loadingId).innerText = data.reply || '抱歉，系統似乎有點遲鈍，請稍後再試。';
+                // 替換文字
+                document.getElementById(loadingId).innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
+                
+                // 如果前一個語音還在播，先讓它停下來
+                if (currentAudio) {
+                    currentAudio.pause();
+                }
+                
+                // 播放 Azure TTS 語音
+                if (data.audio) {
+                    currentAudio = new Audio("data:audio/mp3;base64," + data.audio);
+                    currentAudio.play();
+                }
+                
             } catch (error) {
                 document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。';
             }
@@ -389,7 +405,6 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // 產生訊息氣泡的輔助函數
         function appendMessage(text, className) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `chat-msg ${className}`;
@@ -397,7 +412,7 @@
             const id = 'msg-' + Date.now();
             msgDiv.id = id;
             chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight; // 自動捲動到底部
+            chatMessages.scrollTop = chatMessages.scrollHeight;
             return id;
         }
     </script>
