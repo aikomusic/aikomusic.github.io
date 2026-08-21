@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 強化版 SEO 優化標籤 -->
+    <title>采樂音樂教室 Aiko Music | 新莊大提琴課程、新莊鋼琴課程、新莊音樂教學首選</title>
+    <meta name="description" content="尋找新莊音樂教室？采樂音樂教室位於新莊中榮街，提供專業的新莊鋼琴課程，與主打免帶樂器的「新莊一對一大提琴教學」。具備護眼鋼琴燈與合格消防設備，為兒童與成人打造安心的音樂教學環境。">
+    <meta name="keywords" content="新莊音樂教室, 新莊大提琴課程, 新莊鋼琴課程, 新莊一對一大提琴教學, 新莊小提琴教學, 幼兒音樂律動, 采樂音樂">
+    
+    <!-- GEO 在地化標籤 -->
+    <meta name="geo.region" content="TW-NWT">
+    <meta name="geo.placename" content="Xinzhuang District">
+    <meta name="geo.position" content="25.0485;121.4485">
+    <meta name="ICBM" content="25.0485, 121.4485">
+
+    <style>
+        /* 基礎色彩與字體設定 */
+        :root {
+            --primary-color: #88C9A1; 
+            --secondary-color: #D2A878; 
+            --text-dark: #333333;
+            --text-light: #666666;
+            --bg-light: #FCFAF2; 
+        }
+        body, html {
+            margin: 0; padding: 0; font-family: 'Noto Sans TC', "微軟正黑體", sans-serif;
+            background-color: var(--bg-light); color: var(--text-dark); scroll-behavior: smooth;
+        }
+        a { text-decoration: none; color: inherit; }
+        
+        /* 導覽列 */
+        header {
+            background-color: #ffffff; padding: 10px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+        }
+        .logo img { height: 60px; }
+        .nav-links { display: flex; gap: 25px; font-weight: bold; color: var(--text-dark); }
+        .nav-links a:hover { color: var(--primary-color); }
+
+        /* 首頁主視覺 */
+        .hero {
+            position: relative; width: 100%; height: 80vh; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .hero-video {
+            position: absolute; top: 50%; left: 50%; width: 100vw; height: 100vh;
+            object-fit: cover; transform: translate(-50%, -50%); z-index: 1;
+        }
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); z-index: 2;
+        }
+        .hero-content {
+            position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 10px; letter-spacing: 2px; }
+        .hero-content p { font-size: 1.2rem; margin-bottom: 20px; }
+        .btn {
+            background-color: var(--primary-color); color: white; padding: 12px 30px;
+            border-radius: 30px; font-size: 1.1rem; transition: 0.3s; display: inline-block;
+        }
+        .btn:hover { background-color: #6bb289; }
+
+        /* 特色介紹區 */
+        .features { padding: 60px 10%; text-align: center; }
+        .section-title { font-size: 2rem; color: var(--primary-color); margin-bottom: 10px; }
+        .section-subtitle { color: var(--text-light); margin-bottom: 40px; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .feature-card {
+            background: white; padding: 30px 20px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .feature-card:hover { transform: translateY(-10px); }
+        .feature-card img { width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; object-fit: cover; }
+
+        /* 右下角懸浮 LINE */
+        .floating-line {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            width: 60px; height: 60px; border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.3s;
+        }
+        .floating-line:hover { transform: scale(1.1); }
+        .floating-line img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        /* 頁尾 */
+        footer {
+            background-color: var(--text-dark); color: white; padding: 40px 10%;
+            display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px;
+        }
+        .footer-info p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <!-- 導覽列 -->
+    <header>
+        <div class="logo">
+            <img src="images/logo.png" alt="采樂新莊音樂教室">
+        </div>
+        <nav class="nav-links">
+            <a href="#">首頁</a>
+            <a href="#about">關於采樂</a>
+            <a href="#courses">音樂教學課程</a>
+            <a href="#contact">聯絡我們</a>
+        </nav>
+    </header>
+
+    <!-- 首頁主視覺區 (使用您生成的精美 webp 備援圖) -->
+    <section class="hero">
+        <video class="hero-video" autoplay loop muted playsinline poster="images/xinzhuang-cello-piano-lessons-hero.webp">
+            <!-- 影片網址日後加在這裡 -->
+            <source src="" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>新莊音樂教室推薦・專業教學</h1>
+            <p>專精新莊鋼琴課程與新莊一對一大提琴教學，為您打造專屬藝術空間</p>
+            <a href="#courses" class="btn">探索課程</a>
+        </div>
+    </section>
+
+    <!-- 為什麼選擇采樂 -->
+    <section id="about" class="features">
+        <h2 class="section-title">為什麼選擇采樂？</h2>
+        <p class="section-subtitle">從硬體到教學，我們為您設想每一個細節</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="images/xinzhuang-cello-one-on-one-teaching.webp" alt="新莊一對一大提琴教學免帶樂器" title="新莊大提琴課程免帶樂器">
+                <h3>大提琴免帶樂器</h3>
+                <p>報名我們的新莊大提琴課程，教室皆備有各尺寸大提琴，讓新莊一對一大提琴教學更加輕鬆，免去揹樂器的煩惱。</p>
+            </div>
+            <div class="feature-card">
+                <img src="images/xinzhuang-piano-lessons-environment.webp" alt="新莊鋼琴課程護眼環境" title="新莊鋼琴課程安全環境">
+                <h3>專業護眼與安全</h3>
+                <p>新莊鋼琴課程環境全面升級！安裝 BenQ 智能鋼琴護眼燈，並通過年度消防檢測，確保安全的教學環境。</p>
+            </div>
+            <div class="feature-card">
+                <img src="images/xinzhuang-music-class-stage.webp" alt="音樂教學發表舞台" title="新莊音樂教室專屬舞台">
+                <h3>專屬演出舞台</h3>
+                <p>每年定期舉辦各項樂器的音樂會發表，從個人獨奏到大合奏，培養學員在音樂教學中的自信與台風。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 懸浮 LINE 按鈕 -->
+    <a href="⚫您的LINE連結⚫" class="floating-line" target="_blank" title="預約新莊音樂課程">
+        <!-- 記得放上 line-icon.png 喔 -->
+        <img src="images/line-icon.png" alt="預約新莊鋼琴與大提琴課程">
+    </a>
+
+    <!-- 頁尾 -->
+    <footer id="contact">
+        <div class="footer-info">
+            <h3>采樂音樂教室 Aiko Music</h3>
+            <p>📍 新北市新莊區中榮街56巷2號2樓</p>
+            <p>☎ (02) 2996-7912</p>
+            <p>✉ aikomusic2017@gmail.com</p>
+        </div>
+        <div class="footer-social">
+            <h3>追蹤我們</h3>
+            <p><a href="https://www.facebook.com/aikomusic2" target="_blank">Facebook 粉絲專頁</a></p>
+            <p><a href="https://www.instagram.com/aikomusic2017/" target="_blank">Instagram</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>
