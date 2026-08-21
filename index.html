@@ -13,7 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
     <style>
-        /* 童趣輕盈與溫暖木質調色彩配置 */
         :root {
             --primary-green: #90CBAA; 
             --light-green: #E8F5EE;
@@ -21,6 +20,7 @@
             --bg-cream: #FDFBF7; 
             --text-main: #5C4D43; 
             --text-light: #8C7B70;
+            --alert-red: #E74C3C;
         }
 
         body, html {
@@ -40,7 +40,6 @@
         ::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 10px; border: 3px solid var(--light-green); }
         ::-webkit-scrollbar-thumb:hover { background: #7AB895; }
 
-        /* 🪟 毛玻璃導覽列 */
         header {
             background-color: rgba(255, 255, 255, 0.75); 
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
@@ -58,7 +57,6 @@
         }
         .piano-key:hover { background: var(--light-green); border-bottom: 2px solid var(--primary-green); transform: translateY(4px); color: #2d734b; }
 
-        /* 🌊 首頁主視覺 */
         .hero { 
             position: relative; width: 100%; height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #333; 
             -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,108 C900,118 600,100 300,110 C160,116 70,112 0,108 Z' fill='black'/%3E%3C/svg%3E");
@@ -74,19 +72,16 @@
         .btn-cute { background-color: var(--primary-green); color: white; padding: 15px 35px; border-radius: 50px; font-size: 1.2rem; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4); border: 2px solid white; display: inline-block; }
         .btn-cute:hover { background-color: #7ab895; transform: scale(1.05); }
 
-        /* 共用區塊設定 */
         .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -20px; }
         .sec-title { text-align: center; font-size: 2.5rem; color: var(--primary-green); margin-bottom: 10px; }
         .sec-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem; }
 
-        /* 特色區塊 */
         .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
         .feature-card { background: rgba(255, 255, 255, 0.95); padding: 40px 25px; border-radius: 30px; text-align: center; box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12); border: 1px solid rgba(144, 203, 170, 0.3); transition: 0.3s; backdrop-filter: blur(5px); }
         .feature-card:hover { transform: translateY(-10px); background: #ffffff; box-shadow: 0 20px 40px rgba(140, 123, 112, 0.2); }
         .feature-card img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .feature-card h3 { font-size: 1.4rem; color: var(--text-main); }
 
-        /* 師資與課程介紹 */
         .content-split { display: flex; flex-wrap: wrap; align-items: center; gap: 40px; margin-bottom: 60px; background: rgba(255, 255, 255, 0.95); padding: 40px; border-radius: 30px; box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12); border: 1px solid rgba(212, 163, 115, 0.2); }
         .content-split:nth-child(even) { flex-direction: row-reverse; }
         .content-text { flex: 1; min-width: 300px; }
@@ -95,7 +90,7 @@
         .content-img { flex: 1; min-width: 300px; text-align: center; }
         .content-img img { width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* ✨ AI 懸浮按鈕與全新整合對話框 */
+        /* ✨ AI 懸浮按鈕與對話框 */
         .ai-floating-btn { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 65px; height: 65px; background: var(--primary-green); border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 2px solid white; overflow: hidden; }
         .ai-floating-btn img { width: 100%; height: 100%; object-fit: cover; }
         .ai-floating-btn:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(144, 203, 170, 0.6); }
@@ -104,7 +99,7 @@
         .ai-chat-header { background: var(--primary-green); color: white; padding: 15px; font-weight: bold; text-align: center; display: flex; justify-content: space-between; }
         .close-chat { cursor: pointer; font-size: 1.2rem; }
 
-        /* 🚀 整合功能面板 (新增優雅收折功能) */
+        /* 🚀 整合功能面板 (打字時優雅收合) */
         .ai-feature-toggle {
             background: var(--light-green); color: var(--primary-green); font-size: 0.9rem; font-weight: bold;
             text-align: center; padding: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 5px;
@@ -118,7 +113,6 @@
             transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
             max-height: 200px; opacity: 1; overflow: hidden;
         }
-        /* 收折狀態的 CSS */
         .ai-feature-panel.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom: none; }
 
         .feature-chip { background: var(--warm-wood); color: white; border: none; padding: 10px 15px; border-radius: 30px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3); }
@@ -134,7 +128,7 @@
         .ai-chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; }
         .ai-chat-input button { background: var(--warm-wood); color: white; border: none; padding: 0 20px; margin-left: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
 
-        /* 📷 視覺 AI 專屬彈出視窗 (適當大小、乾淨俐落) */
+        /* 📷 視覺 AI 專屬彈出視窗 (修正說明文字與排版) */
         .ai-vision-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10001; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; flex-direction: column; align-items: center; width: 90vw; max-width: 640px; border: 4px solid var(--primary-green); }
         .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
         .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
@@ -143,7 +137,6 @@
         #poseCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
         .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
 
-        /* 溫暖頁尾 */
         footer {
             background-color: var(--light-green); 
             background: url('images/xinzhuang-footer-bg.webp') center center / cover no-repeat;
@@ -155,7 +148,6 @@
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 手機版優化 */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.2rem; }
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
@@ -167,13 +159,11 @@
                 mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
             }
             .ai-chat-box { width: 90vw; right: 5vw; }
-            .feature-chip { font-size: 0.85rem; padding: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 毛玻璃鋼琴鍵導覽列 (選單更名) -->
     <header>
         <div class="logo">
             <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室"></a>
@@ -184,7 +174,6 @@
             <a href="teachers.html" class="piano-key">師資團隊</a>
             <a href="courses.html" class="piano-key">音樂課程</a>
             <a href="gallery.html" class="piano-key">展演舞台</a>
-            <a href="practice.html" class="piano-key">✨ 線琴工具箱</a>
         </nav>
     </header>
 
@@ -270,7 +259,7 @@
         </div>
     </section>
 
-    <!-- ✨ AI 網頁練琴輔助工具 (包含整合面板) -->
+    <!-- ✨ AI 網頁練琴輔助工具 -->
     <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
         <img src="images/ai-teacher.png" alt="AI 音樂老師">
     </div>
@@ -281,10 +270,10 @@
             <span class="close-chat" id="closeAiChat">✖</span>
         </div>
         
-        <!-- 🚀 整合功能面板 (新增箭頭收合結構) -->
+        <!-- 🚀 整合功能面板 (預設展開) -->
         <div class="ai-feature-toggle" id="featureToggleBtn">
-            <span>✨ 展開黑科技工具箱</span>
-            <span id="toggleIcon">▲</span>
+            <span id="toggleText">✨ 展開黑科技工具箱</span>
+            <span id="toggleIcon">▼</span>
         </div>
         <div class="ai-feature-panel" id="aiFeaturePanel">
             <button class="feature-chip" id="startVisionBtn">📷 啟動 AI 琴姿與骨架分析</button>
@@ -301,7 +290,7 @@
         </div>
     </div>
 
-    <!-- 📷 視覺 AI 專屬彈出視窗 (修正說明文字) -->
+    <!-- 📷 視覺 AI 專屬彈出視窗 (修正說明，拿掉工程師對話，凸顯紅線警告) -->
     <div class="ai-vision-modal" id="visionModal">
         <div class="vision-header">
             <span>📷 AI 琴姿骨架捕捉系統</span>
@@ -313,11 +302,11 @@
             <canvas id="poseCanvas"></canvas>
         </div>
         <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: left; line-height: 1.6;">
-            <b>【使用說明】</b><br>此系統可輔助「鋼琴」與「提琴」的姿態檢視。請將設備放穩，讓鏡頭清楚拍攝到您的<b>「上半身與雙手」</b>。系統將即時畫出關節連線，協助您檢視肩膀是否放鬆、手腕有無塌陷等演奏姿勢。
+            此系統可輔助「鋼琴」與「提琴」的姿態檢視。請將設備放穩，讓鏡頭清楚拍攝到您的<b>「上半身與雙手」</b>。<br>系統將即時畫出關節連線，協助您檢視肩膀是否放鬆、手腕有無塌陷等演奏姿勢。<b>若姿勢不良（如手腕過低），連線將變為 <span style="color:#E74C3C;">紅色</span> 警示！</b>
         </p>
     </div>
 
-    <!-- 溫暖頁尾 (地圖確定保留) -->
+    <!-- 溫暖頁尾 -->
     <footer id="contact">
         <div class="footer-info">
             <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo"> 采樂音樂教室</h3>
@@ -359,7 +348,7 @@
             else { collapsePanel(); }
         });
 
-        // 打字時優雅地往上縮起按鈕面板
+        // 點擊打字時，自動收合按鈕
         chatInput.addEventListener('focus', () => { collapsePanel(); });
 
         // ==========================================
@@ -427,7 +416,7 @@
         }
 
         // ==========================================
-        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉
+        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉 (含紅線警示)
         // ==========================================
         const startVisionBtn = document.getElementById('startVisionBtn');
         const visionModal = document.getElementById('visionModal');
@@ -473,7 +462,6 @@
                 pVideo.srcObject.getTracks().forEach(track => track.stop());
             }
             aiChatBox.style.display = 'flex'; 
-            appendMessage("鏡頭已關閉！希望剛才的姿勢分析對您的練習有幫助喔！", "msg-ai");
         });
 
         async function runPoseDetection() {
@@ -484,14 +472,32 @@
             
             if (poses.length > 0) {
                 const kp = poses[0].keypoints;
-                
                 pCtx.lineWidth = 4;
-                pCtx.strokeStyle = "#90CBAA";
+                
                 const edges = [[5,7],[7,9],[6,8],[8,10],[5,6],[5,11],[6,12],[11,12],[11,13],[13,15],[12,14],[14,16]];
+                
                 edges.forEach(e => {
                     const p1 = kp[e[0]];
                     const p2 = kp[e[1]];
+                    
                     if (p1.score > 0.3 && p2.score > 0.3) {
+                        let isBadPosture = false;
+                        
+                        // 🟢 智慧判斷邏輯：手腕 (9, 10) 如果明顯低於手肘 (7, 8)，代表手腕塌陷
+                        if ((e[0] === 7 && e[1] === 9) || (e[0] === 9 && e[1] === 7)) {
+                            let wrist = e[0] === 9 ? p1 : p2;
+                            let elbow = e[0] === 7 ? p1 : p2;
+                            if (wrist.y > elbow.y + 15) isBadPosture = true; 
+                        }
+                        if ((e[0] === 8 && e[1] === 10) || (e[0] === 10 && e[1] === 8)) {
+                            let wrist = e[0] === 10 ? p1 : p2;
+                            let elbow = e[0] === 8 ? p1 : p2;
+                            if (wrist.y > elbow.y + 15) isBadPosture = true;
+                        }
+
+                        // 判斷線條顏色：不良姿勢亮紅燈，正常姿勢薄荷綠
+                        pCtx.strokeStyle = isBadPosture ? "var(--alert-red)" : "var(--primary-green)";
+                        
                         pCtx.beginPath();
                         pCtx.moveTo(p1.x, p1.y);
                         pCtx.lineTo(p2.x, p2.y);
@@ -503,7 +509,7 @@
                     if (point.score > 0.3) {
                         pCtx.beginPath();
                         pCtx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
-                        pCtx.fillStyle = "#D4A373";
+                        pCtx.fillStyle = "var(--warm-wood)";
                         pCtx.fill();
                         pCtx.strokeStyle = "white";
                         pCtx.lineWidth = 2;
