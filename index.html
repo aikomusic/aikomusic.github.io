@@ -17,7 +17,7 @@
             --text-light: #8C7B70;
         }
 
-        /* 背景圖設定：改為 Cover 與視差滾動，消除拼接方塊感 */
+        /* 內容區底圖設定：完美透出您的水彩音符背景 */
         body, html {
             margin: 0; padding: 0; font-family: 'Nunito', 'Noto Sans TC', sans-serif;
             background-color: var(--bg-cream); 
@@ -54,19 +54,16 @@
             transform: translateY(4px); color: #2d734b;
         }
 
-        /* 🌊 首頁主視覺 (完美固定 60px 高度波浪遮罩，絕不變形) */
+        /* 🌊 首頁主視覺 (完美遮罩剪裁，波浪明顯，透出絕美底圖) */
         .hero { 
             position: relative; width: 100%; height: 85vh; 
             display: flex; align-items: center; justify-content: center; background-color: #333; 
-            
-            -webkit-mask-image: linear-gradient(black, black), url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,30 C900,60 300,0 0,30 Z' fill='black'/%3E%3C/svg%3E");
-            -webkit-mask-size: 100% calc(100% - 59px), 100% 60px;
-            -webkit-mask-position: top, bottom;
+            /* 電腦版的明顯波浪弧度 */
+            -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,40 C800,160 400,-40 0,70 Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-size: 100% 100%;
             -webkit-mask-repeat: no-repeat;
-            
-            mask-image: linear-gradient(black, black), url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,30 C900,60 300,0 0,30 Z' fill='black'/%3E%3C/svg%3E");
-            mask-size: 100% calc(100% - 59px), 100% 60px;
-            mask-position: top, bottom;
+            mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,40 C800,160 400,-40 0,70 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% 100%;
             mask-repeat: no-repeat;
         }
         .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
@@ -82,7 +79,7 @@
         .btn-cute:hover { background-color: #7ab895; transform: scale(1.05); }
 
         /* 共用區塊設定 */
-        .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -10px; }
+        .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -20px; }
         .sec-title { text-align: center; font-size: 2.5rem; color: var(--primary-green); margin-bottom: 10px; }
         .sec-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem; }
 
@@ -107,11 +104,10 @@
         .content-img { flex: 1; min-width: 300px; text-align: center; }
         .content-img img { width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* 童趣頁尾 */
+        /* 🎵 頁尾 (底圖修正：移除混和模式，保證底圖完美顯現) */
         footer {
-            background-color: var(--light-green); 
-            background-image: url('images/xinzhuang-footer-bg.webp'); 
-            background-size: cover; background-blend-mode: soft-light;
+            background-color: var(--light-green); /* 備用底色 */
+            background: url('images/xinzhuang-footer-bg.webp') center center / cover no-repeat;
             padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;
             border-top: 5px dashed var(--primary-green);
         }
@@ -125,13 +121,19 @@
         .floating-line:hover { transform: scale(1.15) rotate(5deg); }
         .floating-line img { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        /* 手機版優化 */
+        /* 手機版優化：專屬防海嘯變形波浪 */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.2rem; }
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
             .logo img { height: 75px; }
             .piano-menu { width: 100%; padding-bottom: 10px; }
             .content-split { padding: 25px; }
+            
+            /* 手機版專屬波浪比例，不會被過度拉長 */
+            .hero {
+                -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,270 C800,380 400,170 0,300 Z' fill='black'/%3E%3C/svg%3E");
+                mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,270 C800,380 400,170 0,300 Z' fill='black'/%3E%3C/svg%3E");
+            }
         }
     </style>
 </head>
@@ -151,7 +153,7 @@
         </nav>
     </header>
 
-    <!-- 主視覺區 (固定 60px 柔和波浪遮罩) -->
+    <!-- 主視覺區 (固定完美波浪) -->
     <section id="hero" class="hero">
         <video class="hero-video" autoplay loop muted playsinline poster="images/xinzhuang-cello-piano-lessons-hero.webp">
             <source src="" type="video/mp4">
