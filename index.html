@@ -17,12 +17,13 @@
             --text-light: #8C7B70;
         }
 
-        /* 背景圖設定：確保無縫圖案完美呈現 */
+        /* 背景圖設定：改為 Cover 與視差滾動，消除拼接方塊感 */
         body, html {
             margin: 0; padding: 0; font-family: 'Nunito', 'Noto Sans TC', sans-serif;
             background-color: var(--bg-cream); 
             background-image: url('images/xinzhuang-music-bg-pattern.webp'); 
-            background-size: 400px; 
+            background-size: cover; 
+            background-attachment: fixed;
             background-blend-mode: multiply; 
             color: var(--text-main); scroll-behavior: smooth;
         }
@@ -53,16 +54,19 @@
             transform: translateY(4px); color: #2d734b;
         }
 
-        /* 🌊 首頁主視覺 (使用 CSS Mask 技術將底部剪裁成波浪，完美透出背景) */
+        /* 🌊 首頁主視覺 (完美固定 60px 高度波浪遮罩，絕不變形) */
         .hero { 
             position: relative; width: 100%; height: 85vh; 
             display: flex; align-items: center; justify-content: center; background-color: #333; 
-            /* 進階剪裁語法：直接把大區塊底邊剪成波浪，不再產生突兀色塊 */
-            -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,80 C900,130 300,30 0,80 Z' fill='black'/%3E%3C/svg%3E");
-            -webkit-mask-size: 100% 100%;
+            
+            -webkit-mask-image: linear-gradient(black, black), url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,30 C900,60 300,0 0,30 Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-size: 100% calc(100% - 59px), 100% 60px;
+            -webkit-mask-position: top, bottom;
             -webkit-mask-repeat: no-repeat;
-            mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,80 C900,130 300,30 0,80 Z' fill='black'/%3E%3C/svg%3E");
-            mask-size: 100% 100%;
+            
+            mask-image: linear-gradient(black, black), url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,30 C900,60 300,0 0,30 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% calc(100% - 59px), 100% 60px;
+            mask-position: top, bottom;
             mask-repeat: no-repeat;
         }
         .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
@@ -78,7 +82,7 @@
         .btn-cute:hover { background-color: #7ab895; transform: scale(1.05); }
 
         /* 共用區塊設定 */
-        .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -30px; } /* 往上縮排讓波浪更緊湊 */
+        .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -10px; }
         .sec-title { text-align: center; font-size: 2.5rem; color: var(--primary-green); margin-bottom: 10px; }
         .sec-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem; }
 
@@ -147,7 +151,7 @@
         </nav>
     </header>
 
-    <!-- 主視覺區 (已經升級為 Mask 裁切) -->
+    <!-- 主視覺區 (固定 60px 柔和波浪遮罩) -->
     <section id="hero" class="hero">
         <video class="hero-video" autoplay loop muted playsinline poster="images/xinzhuang-cello-piano-lessons-hero.webp">
             <source src="" type="video/mp4">
@@ -158,7 +162,6 @@
             <p>新莊在地質感音樂空間・成人與幼兒的藝術啟蒙</p>
             <a href="#courses" class="btn-cute">探索課程 🎵</a>
         </div>
-        <!-- 💡 波浪 SVG 代碼已徹底移除，改用 CSS Mask 控制 -->
     </section>
 
     <!-- 為什麼選擇采樂 -->
