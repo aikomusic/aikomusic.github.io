@@ -188,6 +188,15 @@
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
+        /* 🎧 古典聆賞室專屬樣式 */
+        .playlist-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
+        .track-item { display: flex; align-items: center; justify-content: space-between; background: var(--light-green); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(144, 203, 170, 0.3); transition: 0.3s; }
+        .track-item:hover { box-shadow: 0 4px 12px rgba(92, 77, 67, 0.1); transform: translateY(-2px); }
+        .track-info { display: flex; flex-direction: column; }
+        .track-name { font-weight: bold; color: var(--text-main); font-size: 1.1rem; }
+        .track-composer { font-size: 0.9rem; color: var(--text-light); }
+        audio { height: 40px; outline: none; }
+
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
             .logo img { height: 75px; }
@@ -195,6 +204,9 @@
             .tool-container { padding: 30px 20px; }
             .metronome-display { font-size: 3.4rem; }
             .ai-chat-box { width: 90vw; right: 5vw; }
+            /* 🎧 手機版播放器適配 */
+            .track-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            audio { width: 100%; }
         }
     </style>
 </head>
@@ -224,6 +236,51 @@
     </section>
 
     <section class="section-box">
+        
+        <!-- 🎧 采樂嚴選古典歌單區塊 (置於最前方) -->
+        <div class="tool-container">
+            <h2 class="tool-title">🎧 采樂古典聆賞室</h2>
+            <p class="tool-subtitle">精選世界名曲，培養音樂鑑賞力 (點擊直接播放)</p>
+            
+            <div class="playlist-container">
+                <!-- 歌曲 1 -->
+                <div class="track-item">
+                    <div class="track-info">
+                        <span class="track-name">莫札特：小夜曲 (Eine kleine Nachtmusik)</span>
+                        <span class="track-composer">W.A. Mozart</span>
+                    </div>
+                    <audio controls controlsList="nodownload">
+                        <source src="https://upload.wikimedia.org/wikipedia/commons/2/24/Mozart_-_Eine_kleine_Nachtmusik_-_1._Allegro.ogg" type="audio/ogg">
+                        您的瀏覽器不支援音樂播放。
+                    </audio>
+                </div>
+
+                <!-- 歌曲 2 -->
+                <div class="track-item">
+                    <div class="track-info">
+                        <span class="track-name">巴哈：G弦之歌 (Air on the G String)</span>
+                        <span class="track-composer">J.S. Bach</span>
+                    </div>
+                    <audio controls controlsList="nodownload">
+                        <source src="https://upload.wikimedia.org/wikipedia/commons/8/87/Bach_-_Air_on_the_G_String.ogg" type="audio/ogg">
+                        您的瀏覽器不支援音樂播放。
+                    </audio>
+                </div>
+
+                <!-- 歌曲 3 -->
+                <div class="track-item">
+                    <div class="track-info">
+                        <span class="track-name">貝多芬：月光奏鳴曲 (Moonlight Sonata)</span>
+                        <span class="track-composer">L.v. Beethoven</span>
+                    </div>
+                    <audio controls controlsList="nodownload">
+                        <source src="https://upload.wikimedia.org/wikipedia/commons/3/36/Beethoven%2C_Sonata_Quasi_una_Fantasia%2C_Op._27%2C_No._2_-_1._Adagio_sostenuto.ogg" type="audio/ogg">
+                        您的瀏覽器不支援音樂播放。
+                    </audio>
+                </div>
+            </div>
+        </div>
+
         <div class="tool-container">
             <h2 class="tool-title">🎙️ Web Audio 智慧聽音雷達</h2>
             <p class="tool-subtitle">開啟麥克風，讓網頁即時「看見」您的大提琴與鋼琴音波</p>
