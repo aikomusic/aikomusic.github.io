@@ -128,7 +128,14 @@
         .ai-chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; }
         .ai-chat-input button { background: var(--warm-wood); color: white; border: none; padding: 0 20px; margin-left: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
 
-        /* 📷 視覺 AI 專屬彈出視窗 (修正說明文字與排版) */
+        /* ✅ 視覺 AI 全螢幕霧化背景 */
+        .vision-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 10000; display: none; transition: 0.3s;
+        }
+
+        /* 📷 視覺 AI 專屬彈出視窗 (修正 z-index 浮在霧化背景之上) */
         .ai-vision-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10001; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; flex-direction: column; align-items: center; width: 90vw; max-width: 640px; border: 4px solid var(--primary-green); }
         .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
         .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
@@ -174,6 +181,7 @@
             <a href="teachers.html" class="piano-key">師資團隊</a>
             <a href="courses.html" class="piano-key">音樂課程</a>
             <a href="gallery.html" class="piano-key">展演舞台</a>
+            <a href="practice.html" class="piano-key">✨ 線琴工具箱</a>
         </nav>
     </header>
 
@@ -270,7 +278,7 @@
             <span class="close-chat" id="closeAiChat">✖</span>
         </div>
         
-        <!-- 🚀 整合功能面板 (預設展開) -->
+        <!-- 🚀 整合功能面板 -->
         <div class="ai-feature-toggle" id="featureToggleBtn">
             <span id="toggleText">✨ 展開黑科技工具箱</span>
             <span id="toggleIcon">▼</span>
@@ -290,7 +298,10 @@
         </div>
     </div>
 
-    <!-- 📷 視覺 AI 專屬彈出視窗 (修正說明，拿掉工程師對話，凸顯紅線警告) -->
+    <!-- ✅ 全螢幕霧化背景 -->
+    <div class="vision-overlay" id="visionOverlay"></div>
+
+    <!-- 📷 視覺 AI 專屬彈出視窗 -->
     <div class="ai-vision-modal" id="visionModal">
         <div class="vision-header">
             <span>📷 AI 琴姿骨架捕捉系統</span>
@@ -416,10 +427,11 @@
         }
 
         // ==========================================
-        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉 (含紅線警示)
+        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉 (加入背景霧化連動)
         // ==========================================
         const startVisionBtn = document.getElementById('startVisionBtn');
         const visionModal = document.getElementById('visionModal');
+        const visionOverlay = document.getElementById('visionOverlay');
         const closeVisionModal = document.getElementById('closeVisionModal');
         const pVideo = document.getElementById('poseVideo');
         const pCanvas = document.getElementById('poseCanvas');
@@ -431,6 +443,7 @@
 
         startVisionBtn.addEventListener('click', async () => {
             aiChatBox.style.display = 'none'; 
+            visionOverlay.style.display = 'block'; // ✅ 顯示霧化背景
             visionModal.style.display = 'flex'; 
             vLoading.style.display = 'block';
             
@@ -457,6 +470,7 @@
 
         closeVisionModal.addEventListener('click', () => {
             visionModal.style.display = 'none';
+            visionOverlay.style.display = 'none'; // ✅ 隱藏霧化背景
             poseRunning = false;
             if (pVideo.srcObject) {
                 pVideo.srcObject.getTracks().forEach(track => track.stop());
@@ -483,7 +497,6 @@
                     if (p1.score > 0.3 && p2.score > 0.3) {
                         let isBadPosture = false;
                         
-                        // 🟢 智慧判斷邏輯：手腕 (9, 10) 如果明顯低於手肘 (7, 8)，代表手腕塌陷
                         if ((e[0] === 7 && e[1] === 9) || (e[0] === 9 && e[1] === 7)) {
                             let wrist = e[0] === 9 ? p1 : p2;
                             let elbow = e[0] === 7 ? p1 : p2;
@@ -495,7 +508,6 @@
                             if (wrist.y > elbow.y + 15) isBadPosture = true;
                         }
 
-                        // 判斷線條顏色：不良姿勢亮紅燈，正常姿勢薄荷綠
                         pCtx.strokeStyle = isBadPosture ? "var(--alert-red)" : "var(--primary-green)";
                         
                         pCtx.beginPath();
