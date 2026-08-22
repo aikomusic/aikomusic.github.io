@@ -119,6 +119,10 @@
         .feature-chip:hover { background: #b88a5d; transform: translateY(-2px); }
         .feature-chip.disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
 
+        /* 📸 新增：動態合奏解鎖按鈕特效 */
+        .feature-chip.highlight { background: #E74C3C; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
+
         .ai-chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 10px; font-size: 1rem; }
         .chat-msg { padding: 12px 15px; border-radius: 15px; max-width: 80%; line-height: 1.5; word-break: break-word; }
         .msg-user { background: var(--light-green); color: var(--text-main); align-self: flex-end; border-bottom-right-radius: 5px; }
@@ -140,9 +144,14 @@
         .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
         .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
         .camera-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 4/3; }
-        #poseVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        #poseCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+        #poseVideo, #omrVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #poseCanvas, #omrCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
         .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
+
+        /* 📸 新增：掃描特效 (OMR 專用) */
+        .scanner-laser { position: absolute; width: 100%; height: 4px; background: var(--alert-red); box-shadow: 0 0 15px var(--alert-red); top: 0; left: 0; display: none; z-index: 5; }
+        .scanning .scanner-laser { display: block; animation: scanAnim 2s infinite linear; }
+        @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
 
         footer {
             background-color: var(--light-green); 
@@ -284,9 +293,12 @@
             <span id="toggleIcon">▼</span>
         </div>
         <div class="ai-feature-panel" id="aiFeaturePanel">
+            <!-- ✅ 第一科：琴姿捕捉 -->
             <button class="feature-chip" id="startVisionBtn">📷 啟動 AI 琴姿與骨架分析</button>
-            <button class="feature-chip disabled">🎼 拍譜轉伴奏 (建置中)</button>
-            <button class="feature-chip disabled">🎻 動態合奏 (建置中)</button>
+            <!-- ✅ 第二科：拍譜轉伴奏解鎖 -->
+            <button class="feature-chip" id="startOmrBtn">🎼 AI 拍譜轉伴奏</button>
+            <!-- ✅ 第三科：動態合奏 (預設鎖住，拍完譜才解鎖發光) -->
+            <button class="feature-chip disabled" id="startSynthBtn">🎻 動態合奏 (請先拍譜解鎖)</button>
         </div>
 
         <div class="ai-chat-messages" id="chatMessages">
@@ -315,6 +327,22 @@
         <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: left; line-height: 1.6;">
             此系統可輔助「鋼琴」與「提琴」的姿態檢視。請將設備放穩，讓鏡頭清楚拍攝到您的<b>「上半身與雙手」</b>。<br>系統將即時畫出關節連線，協助您檢視肩膀是否放鬆、手腕有無塌陷等演奏姿勢。<b>若姿勢不良（如手腕過低），連線將變為 <span style="color:#E74C3C;">紅色</span> 警示！</b>
         </p>
+    </div>
+
+    <!-- 🎼 AI 拍譜掃描儀專屬彈出視窗 -->
+    <div class="ai-vision-modal" id="omrModal">
+        <div class="vision-header">
+            <span>🎼 AI 拍譜分析儀</span>
+            <span class="vision-close" id="closeOmrModal">×</span>
+        </div>
+        <div class="camera-box" id="omrCameraBox">
+            <div class="loading-text" id="omrLoading">相機啟動中...</div>
+            <video id="omrVideo" autoplay playsinline muted></video>
+            <canvas id="omrCanvas"></canvas>
+            <div class="scanner-laser"></div> <!-- 超酷雷射特效 -->
+        </div>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將鏡頭對準樂譜（需包含和弦），點擊下方按鈕進行 AI 深度視覺掃描。</p>
+        <button class="btn-cute" id="captureOmrBtn" style="width: 100%; margin-top: 10px; background: #D4A373; font-size: 1rem; border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold;">📸 拍下樂譜並分析</button>
     </div>
 
     <!-- 溫暖頁尾 -->
@@ -427,7 +455,7 @@
         }
 
         // ==========================================
-        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉 (加入背景霧化連動)
+        // 3. 核心黑科技：AI 鏡頭琴姿骨架捕捉
         // ==========================================
         const startVisionBtn = document.getElementById('startVisionBtn');
         const visionModal = document.getElementById('visionModal');
@@ -443,7 +471,7 @@
 
         startVisionBtn.addEventListener('click', async () => {
             aiChatBox.style.display = 'none'; 
-            visionOverlay.style.display = 'block'; // ✅ 顯示霧化背景
+            visionOverlay.style.display = 'block'; 
             visionModal.style.display = 'flex'; 
             vLoading.style.display = 'block';
             
@@ -470,7 +498,7 @@
 
         closeVisionModal.addEventListener('click', () => {
             visionModal.style.display = 'none';
-            visionOverlay.style.display = 'none'; // ✅ 隱藏霧化背景
+            visionOverlay.style.display = 'none'; 
             poseRunning = false;
             if (pVideo.srcObject) {
                 pVideo.srcObject.getTracks().forEach(track => track.stop());
@@ -532,6 +560,137 @@
             
             requestAnimationFrame(runPoseDetection);
         }
+
+        // ==========================================
+        // 4. 黑科技 2 & 3：拍譜轉伴奏 + 動態合奏
+        // ==========================================
+        const startOmrBtn = document.getElementById('startOmrBtn');
+        const omrModal = document.getElementById('omrModal');
+        const closeOmrModal = document.getElementById('closeOmrModal');
+        const omrVideo = document.getElementById('omrVideo');
+        const omrCanvas = document.getElementById('omrCanvas');
+        const omrCtx = omrCanvas.getContext('2d');
+        const omrCameraBox = document.getElementById('omrCameraBox');
+        const captureOmrBtn = document.getElementById('captureOmrBtn');
+        const startSynthBtn = document.getElementById('startSynthBtn');
+        
+        startOmrBtn.addEventListener('click', async () => {
+            aiChatBox.style.display = 'none'; 
+            visionOverlay.style.display = 'block'; 
+            omrModal.style.display = 'flex';
+            captureOmrBtn.innerText = '📸 拍下樂譜並分析'; 
+            captureOmrBtn.disabled = false; 
+            omrCameraBox.classList.remove('scanning');
+            
+            try {
+                // 強制開啟後鏡頭方便拍譜
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); 
+                omrVideo.srcObject = stream; 
+                omrVideo.style.transform = "none"; 
+                omrCanvas.style.transform = "none";
+                document.getElementById('omrLoading').style.display = 'none';
+            } catch (err) { 
+                document.getElementById('omrLoading').innerText = '無法存取鏡頭'; 
+            }
+        });
+
+        closeOmrModal.addEventListener('click', () => {
+            omrModal.style.display = 'none'; 
+            visionOverlay.style.display = 'none'; 
+            omrCameraBox.classList.remove('scanning');
+            if (omrVideo.srcObject) {
+                omrVideo.srcObject.getTracks().forEach(t => t.stop()); 
+            }
+            aiChatBox.style.display = 'flex';
+        });
+
+        captureOmrBtn.addEventListener('click', async () => {
+            if (!omrVideo.srcObject) return;
+            
+            // 擷取畫面
+            omrCanvas.width = omrVideo.videoWidth; 
+            omrCanvas.height = omrVideo.videoHeight;
+            omrCtx.drawImage(omrVideo, 0, 0, omrCanvas.width, omrCanvas.height);
+            omrVideo.srcObject.getTracks().forEach(t => t.stop());
+            
+            omrCameraBox.classList.add('scanning');
+            captureOmrBtn.innerText = '⏳ 正在傳送至 Gemini 大腦解析中...'; 
+            captureOmrBtn.disabled = true;
+
+            const base64Image = omrCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+
+            try {
+                // 呼叫您建好的 PHP 視覺 API
+                const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-omr', {
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image })
+                });
+                const data = await response.json();
+
+                omrModal.style.display = 'none'; 
+                visionOverlay.style.display = 'none';
+                omrCameraBox.classList.remove('scanning'); 
+                aiChatBox.style.display = 'flex';
+
+                window.lastDetectedChords = data.chords;
+                appendMessage(`🎼 分析完成！這份樂譜的和弦是：【${data.chords}】。我已經為您解鎖了「動態合奏」功能！`, 'msg-ai');
+
+                // 解鎖第三顆按鈕
+                startSynthBtn.classList.remove('disabled');
+                startSynthBtn.classList.add('highlight');
+                startSynthBtn.innerText = '🎻 播放 AI 動態伴奏';
+
+            } catch (err) {
+                captureOmrBtn.innerText = '❌ 解析失敗，請重試'; 
+                captureOmrBtn.disabled = false; 
+                omrCameraBox.classList.remove('scanning');
+            }
+        });
+
+        // 🎻 啟動 Web Audio 合奏伴奏
+        startSynthBtn.addEventListener('click', async function() {
+            if(this.classList.contains('disabled')) return;
+            if(!window.lastDetectedChords) return;
+
+            appendMessage('🎵 正在為您生成伴奏音軌，請跟著節奏一起練習吧！', 'msg-ai');
+            this.innerText = '🎵 伴奏播放中...'; 
+            this.classList.remove('highlight');
+
+            // 基礎和弦頻率對照表
+            const chordMap = {
+                'C': [261.63, 329.63, 392.00], 'Cm': [261.63, 311.13, 392.00],
+                'D': [293.66, 369.99, 440.00], 'Dm': [293.66, 349.23, 440.00],
+                'E': [329.63, 415.30, 493.88], 'Em': [329.63, 392.00, 493.88],
+                'F': [349.23, 440.00, 523.25], 'Fm': [349.23, 415.30, 523.25],
+                'G': [392.00, 493.88, 587.33], 'Gm': [392.00, 466.16, 587.33],
+                'A': [440.00, 554.37, 659.25], 'Am': [440.00, 523.25, 659.25],
+                'B': [493.88, 622.25, 739.99], 'Bm': [493.88, 587.33, 739.99]
+            };
+
+            // 抓取出字串中的和弦
+            const matches = window.lastDetectedChords.match(/[A-G][m]?/g) || ['C', 'G', 'Am', 'F'];
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+            for (let chord of matches) {
+                const freqs = chordMap[chord] || chordMap['C'];
+                freqs.forEach(freq => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); 
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+                    osc.start(audioCtx.currentTime); 
+                    osc.stop(audioCtx.currentTime + 1.5);
+                });
+                await new Promise(r => setTimeout(r, 1500)); // 每個和弦彈 1.5 秒
+            }
+
+            this.innerText = '🎻 再聽一次伴奏';
+        });
     </script>
 </body>
 </html>
