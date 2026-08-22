@@ -237,49 +237,132 @@
 
     <section class="section-box">
         
-        <!-- 🎧 采樂嚴選古典歌單區塊 (置於最前方) -->
-        <div class="tool-container">
-            <h2 class="tool-title">🎧 采樂古典聆賞室</h2>
-            <p class="tool-subtitle">精選世界名曲，培養音樂鑑賞力 (點擊直接播放)</p>
+        <!-- 🎧 采樂跨國古典聆賞室 (動態切換版) -->
+<div class="tool-container">
+    <h2 class="tool-title">🎧 采樂跨國古典聆賞室</h2>
+    <p class="tool-subtitle">精選世界各國巨匠名曲，培養音樂鑑賞力 (點擊標籤切換)</p>
+    
+    <!-- 國家/作曲家分類標籤 -->
+    <div class="composer-tabs" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-top: 20px; border-bottom: 2px solid var(--light-green);">
+        <button class="composer-tab active" data-country="austria" style="background: var(--primary-green); color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap;">🇦🇹 奧地利 (莫札特)</button>
+        <button class="composer-tab" data-country="germany" style="background: white; color: var(--text-light); border: 1px solid var(--light-green); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap;">🇩🇪 德國 (貝多芬)</button>
+        <button class="composer-tab" data-country="poland" style="background: white; color: var(--text-light); border: 1px solid var(--light-green); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap;">🇵🇱 波蘭 (蕭邦)</button>
+        <button class="composer-tab" data-country="china" style="background: white; color: var(--text-light); border: 1px solid var(--light-green); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap;">🇨🇳 中國 (傳統名曲)</button>
+        <button class="composer-tab" data-country="japan" style="background: white; color: var(--text-light); border: 1px solid var(--light-green); padding: 8px 16px; border-radius: 20px; font-weight: bold; cursor: pointer; white-space: nowrap;">🇯🇵 日本 (傳統名曲)</button>
+    </div>
+
+    <div class="playlist-container" id="playlistContainer">
+        <!-- 音樂列表會由下方 JavaScript 動態載入 -->
+    </div>
+</div>
+
+<script>
+    // 🎵 音樂資料庫 (包含東西方名曲)
+    const musicDatabase = {
+        "austria": {
+            countryName: "奧地利", composer: "莫札特",
+            tracks: [
+                { title: "小夜曲 第一樂章 (Eine kleine Nachtmusik)", src: "https://upload.wikimedia.org/wikipedia/commons/2/24/Mozart_-_Eine_kleine_Nachtmusik_-_1._Allegro.ogg" },
+                { title: "第40號交響曲 第一樂章", src: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Symphony_No._40_in_G_Minor%2C_K._550_-_I._Molto_allegro.ogg" }
+            ]
+        },
+        "germany": {
+            countryName: "德國", composer: "貝多芬",
+            tracks: [
+                // 這裡更新了最穩定的維基連結，解決 0:00 的問題
+                { title: "月光奏鳴曲 第一樂章", src: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Beethoven_Moonlight_Sonata_movement_1.ogg" },
+                { title: "給愛麗絲 (Für Elise)", src: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Beethoven_-_F%C3%BCr_Elise.ogg" }
+            ]
+        },
+        "poland": {
+            countryName: "波蘭", composer: "蕭邦",
+            tracks: [
+                { title: "降E大調夜曲 Op.9 No.2", src: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Chopin_Nocturne_Op._9_No._2.ogg" },
+                { title: "雨滴前奏曲 (Raindrop)", src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Chopin_Prelude_Op_28_No_15_Raindrop.ogg" }
+            ]
+        },
+        "china": {
+            countryName: "中國", composer: "東方名曲",
+            tracks: [
+                // 東方音樂無版權連結極少且易失效，這裡設定為您的空間路徑，請自行上傳 MP3 檔案
+                { title: "茉莉花 (江蘇民歌)", src: "music/molihua.mp3", note: "👉 站長請將 MP3 上傳至 music 資料夾" },
+                { title: "高山流水 (古箏名曲)", src: "music/gaoshan.mp3", note: "👉 站長請將 MP3 上傳至 music 資料夾" }
+            ]
+        },
+        "japan": {
+            countryName: "日本", composer: "東方名曲",
+            tracks: [
+                { title: "荒城之月 (瀧廉太郎)", src: "music/kojo_no_tsuki.mp3", note: "👉 站長請將 MP3 上傳至 music 資料夾" },
+                { title: "櫻花櫻花 (傳統箏曲)", src: "music/sakura.mp3", note: "👉 站長請將 MP3 上傳至 music 資料夾" }
+            ]
+        }
+    };
+
+    const playlistContainer = document.getElementById('playlistContainer');
+    const tabs = document.querySelectorAll('.composer-tab');
+    let currentAudio = null;
+
+    function loadPlaylist(countryKey) {
+        playlistContainer.innerHTML = '';
+        const data = musicDatabase[countryKey];
+        
+        data.tracks.forEach(track => {
+            const trackDiv = document.createElement('div');
+            // 行內樣式確保不會跟您其他的 CSS 打架
+            trackDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between; background: var(--light-green); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(144, 203, 170, 0.3); margin-top: 15px;";
             
-            <div class="playlist-container">
-                <!-- 歌曲 1 -->
-                <div class="track-item">
-                    <div class="track-info">
-                        <span class="track-name">莫札特：小夜曲 (Eine kleine Nachtmusik)</span>
-                        <span class="track-composer">W.A. Mozart</span>
-                    </div>
-                    <audio controls controlsList="nodownload">
-                        <source src="https://upload.wikimedia.org/wikipedia/commons/2/24/Mozart_-_Eine_kleine_Nachtmusik_-_1._Allegro.ogg" type="audio/ogg">
-                        您的瀏覽器不支援音樂播放。
-                    </audio>
-                </div>
+            // 如果是需要自己上傳的東方音樂，顯示紅字提示給您看
+            const hintHtml = track.note ? `<div style="font-size: 0.8rem; color: #E74C3C; margin-top: 5px; font-weight: bold;">${track.note}</div>` : '';
 
-                <!-- 歌曲 2 -->
-                <div class="track-item">
-                    <div class="track-info">
-                        <span class="track-name">巴哈：G弦之歌 (Air on the G String)</span>
-                        <span class="track-composer">J.S. Bach</span>
-                    </div>
-                    <audio controls controlsList="nodownload">
-                        <source src="https://upload.wikimedia.org/wikipedia/commons/8/87/Bach_-_Air_on_the_G_String.ogg" type="audio/ogg">
-                        您的瀏覽器不支援音樂播放。
-                    </audio>
+            trackDiv.innerHTML = `
+                <div style="display: flex; flex-direction: column; text-align: left; max-width: 65%;">
+                    <span style="font-weight: bold; color: var(--text-main); font-size: 1.1rem;">${track.title}</span>
+                    <span style="font-size: 0.9rem; color: var(--text-light);">${data.countryName} | ${data.composer}</span>
+                    ${hintHtml}
                 </div>
+                <audio controls controlsList="nodownload" style="height: 40px; outline: none; max-width: 120px;">
+                    <source src="${track.src}" type="audio/mpeg">
+                    <source src="${track.src}" type="audio/ogg">
+                </audio>
+            `;
+            
+            const audioEl = trackDiv.querySelector('audio');
+            
+            // 貼心功能：點擊播放時，自動暫停上一首，避免兩首歌一起吵
+            audioEl.addEventListener('play', () => {
+                if(currentAudio && currentAudio !== audioEl) {
+                    currentAudio.pause();
+                }
+                currentAudio = audioEl;
+            });
 
-                <!-- 歌曲 3 -->
-                <div class="track-item">
-                    <div class="track-info">
-                        <span class="track-name">貝多芬：月光奏鳴曲 (Moonlight Sonata)</span>
-                        <span class="track-composer">L.v. Beethoven</span>
-                    </div>
-                    <audio controls controlsList="nodownload">
-                        <source src="https://upload.wikimedia.org/wikipedia/commons/3/36/Beethoven%2C_Sonata_Quasi_una_Fantasia%2C_Op._27%2C_No._2_-_1._Adagio_sostenuto.ogg" type="audio/ogg">
-                        您的瀏覽器不支援音樂播放。
-                    </audio>
-                </div>
-            </div>
-        </div>
+            playlistContainer.appendChild(trackDiv);
+        });
+    }
+
+    // 網頁開啟時，預設先載入奧地利(莫札特)
+    loadPlaylist('austria');
+
+    // 點擊標籤的切換動畫與邏輯
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            // 先把所有標籤變回白色
+            tabs.forEach(t => {
+                t.style.background = 'white';
+                t.style.color = 'var(--text-light)';
+                t.style.border = '1px solid var(--light-green)';
+            });
+            // 把點擊的標籤變成綠色
+            e.target.style.background = 'var(--primary-green)';
+            e.target.style.color = 'white';
+            e.target.style.border = 'none';
+            
+            // 載入對應國家的音樂
+            loadPlaylist(e.target.dataset.country);
+        });
+    });
+</script>
+<!-- 🎧 采樂跨國古典聆賞室 結束 -->
 
         <div class="tool-container">
             <h2 class="tool-title">🎙️ Web Audio 智慧聽音雷達</h2>
