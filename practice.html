@@ -3,179 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>線上練琴室 | 采樂音樂教室 Aiko Music - 智慧節拍器與聽音輔助</title>
-    <meta name="description" content="采樂音樂教室專屬線上練琴室，提供網頁版智慧節拍器與AI聽音頻譜分析工具。幫助新莊大提琴與鋼琴學員在家也能擁有專業的節奏訓練環境。">
+    <title>采樂音樂教室 Aiko Music | 新莊大提琴課程、新莊鋼琴、音樂升學檢定</title>
+    <meta name="description" content="采樂音樂教室位於新莊中榮街，由專業師資打造。提供新莊鋼琴課程、大提琴一對一教學（免帶樂器）、音樂檢定考試與升學輔導，給孩子最豐富的展演舞台。">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
     <style>
         :root {
-            --primary-green: #90CBAA;
+            --primary-green: #90CBAA; 
             --light-green: #E8F5EE;
-            --warm-wood: #D4A373;
-            --bg-cream: #FDFBF7;
-            --text-main: #5C4D43;
+            --warm-wood: #D4A373; 
+            --bg-cream: #FDFBF7; 
+            --text-main: #5C4D43; 
             --text-light: #8C7B70;
-            --accent-yellow: #F4D03F;
+            --alert-red: #E74C3C;
         }
 
         body, html {
-            margin: 0; padding: 0; font-family: 'Nunito', 'Noto Sans TC', "微軟正黑體", sans-serif;
-            background-color: var(--bg-cream);
-            background-image: url('images/xinzhuang-music-bg-pattern.webp');
-            background-size: cover; background-attachment: fixed;
-            background-blend-mode: multiply;
-            color: var(--text-main); scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-cream); 
+            background-image: url('images/xinzhuang-music-bg-pattern.webp'); 
+            background-size: cover; 
+            background-attachment: fixed;
+            background-blend-mode: multiply; 
+            color: var(--text-main);
+            scroll-behavior: smooth;
         }
+
         a { text-decoration: none; color: inherit; }
 
         html { scrollbar-color: var(--primary-green) var(--light-green); scrollbar-width: auto; }
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: var(--light-green); }
-        ::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 10px; border: 3px solid var(--light-green); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-green);
+            border-radius: 10px;
+            border: 3px solid var(--light-green);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: #7AB895; }
 
         header {
-            background-color: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            background-color: rgba(255, 255, 255, 0.75); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); 
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100;
-        }
-        .logo img { height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
-        .piano-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
-        .piano-key {
-            background: rgba(255, 255, 255, 0.9); border: 1px solid #e0e0e0; border-bottom: 6px solid #d0d0d0;
-            border-radius: 0 0 8px 8px; padding: 12px 22px; font-weight: bold;
-            color: var(--text-main); transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap;
-        }
-        .piano-key:hover, .piano-key.active {
-            background: var(--light-green); border-bottom: 2px solid var(--primary-green);
-            transform: translateY(4px); color: #2d734b;
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .page-hero {
-            position: relative; width: 100%; height: 40vh;
-            display: flex; align-items: center; justify-content: center; background-color: #333;
+        .logo img { height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); } 
+        
+        .piano-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
+        .piano-key {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #e0e0e0;
+            border-bottom: 6px solid #d0d0d0;
+            border-radius: 0 0 8px 8px;
+            padding: 12px 22px;
+            font-weight: bold;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            white-space: nowrap;
+        }
+        .piano-key:hover, .piano-key.active {
+            background: var(--light-green);
+            border-bottom: 2px solid var(--primary-green);
+            transform: translateY(4px);
+            color: #2d734b;
+        }
+
+        .hero { 
+            position: relative; width: 100%; height: 85vh; display: flex; align-items: center; justify-content: center; background-color: #333; 
             -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,108 C900,118 600,100 300,110 C160,116 70,112 0,108 Z' fill='black'/%3E%3C/svg%3E");
             -webkit-mask-size: 100% 100%; -webkit-mask-repeat: no-repeat;
             mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,108 C900,118 600,100 300,110 C160,116 70,112 0,108 Z' fill='black'/%3E%3C/svg%3E");
             mask-size: 100% 100%; mask-repeat: no-repeat;
         }
-        .page-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-        .page-hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)); z-index: 2; }
-        .page-hero-content { position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); padding: 0 20px; }
-        .page-hero-content h1 { font-size: 2.8rem; margin-bottom: 10px; letter-spacing: 2px; font-weight: 900; }
-        .page-hero-content p { font-size: 1.2rem; font-weight: 500; }
+        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.5)); z-index: 2; }
+        .hero-content { position: relative; z-index: 3; text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); padding: 0 20px; }
+        .hero-content h1 { font-size: 3.5rem; margin-bottom: 15px; letter-spacing: 3px; font-weight: 900; }
+        .hero-content p { font-size: 1.3rem; margin-bottom: 30px; font-weight: 500; }
+        
+        .btn-cute {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4);
+            border: 2px solid white;
+            display: inline-block;
+        }
+        .btn-cute:hover { background-color: #7ab895; transform: scale(1.05); }
 
         .section-box { padding: 60px 10%; position: relative; z-index: 5; margin-top: -20px; }
-        .tool-container {
-            max-width: 800px; margin: 0 auto 40px auto; background: rgba(255, 255, 255, 0.95);
-            padding: 50px; border-radius: 30px; box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12);
-            border: 1px solid rgba(212, 163, 115, 0.2); backdrop-filter: blur(5px);
+        .sec-title { text-align: center; font-size: 2.5rem; color: var(--primary-green); margin-bottom: 10px; }
+        .sec-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; font-size: 1.1rem; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 25px;
+            border-radius: 30px;
             text-align: center;
+            box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12);
+            border: 1px solid rgba(144, 203, 170, 0.3);
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
-        .tool-title { color: var(--primary-green); font-size: 2rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .tool-subtitle { color: var(--text-light); margin-bottom: 30px; }
+        .feature-card:hover { transform: translateY(-10px); background: #ffffff; box-shadow: 0 20px 40px rgba(140, 123, 112, 0.2); }
+        .feature-card img { width: 120px; height: 120px; border-radius: 50%; margin-bottom: 20px; object-fit: cover; border: 5px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .feature-card h3 { font-size: 1.4rem; color: var(--text-main); }
 
-        .metronome-display { font-size: 5rem; font-weight: 900; color: var(--warm-wood); margin: 20px 0; font-family: monospace; }
-        .visual-beat { width: 40px; height: 40px; border-radius: 50%; background-color: #ddd; margin: 0 auto 30px; transition: background-color 0.1s; }
-        .visual-beat.active { background-color: var(--primary-green); box-shadow: 0 0 20px var(--primary-green); }
-        .bpm-slider { width: 80%; max-width: 400px; -webkit-appearance: none; background: var(--light-green); height: 10px; border-radius: 5px; outline: none; margin-bottom: 40px; }
-        .bpm-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; border-radius: 50%; background: var(--warm-wood); cursor: pointer; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        #audioCanvas { width: 100%; height: 150px; background: #222; border-radius: 15px; margin-bottom: 20px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
-        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; background: #eee; color: #888; margin-bottom: 20px; }
-        .status-badge.listening { background: var(--light-green); color: var(--primary-green); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(144, 203, 170, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(144, 203, 170, 0); } 100% { box-shadow: 0 0 0 0 rgba(144, 203, 170, 0); } }
-
-        .controls { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .btn-action {
-            background-color: var(--primary-green); color: white; padding: 15px 35px;
-            border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
-            border: none; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4); transition: 0.3s;
+        .content-split {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12);
+            border: 1px solid rgba(212, 163, 115, 0.2);
         }
-        .btn-action:hover { background-color: #7ab895; transform: scale(1.05); }
-        .btn-action.active { background-color: #e74c3c; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
-        .btn-mic { background-color: var(--warm-wood); box-shadow: 0 5px 15px rgba(212, 163, 115, 0.4); }
-        .btn-mic:hover { background-color: #b88a5d; }
+        .content-split:nth-child(even) { flex-direction: row-reverse; }
+        .content-text { flex: 1; min-width: 300px; }
+        .content-text h3 { font-size: 1.8rem; color: var(--warm-wood); margin-bottom: 15px; }
+        .content-text ul { line-height: 1.8; color: var(--text-main); padding-left: 20px; font-size: 1.1rem; }
+        .content-img { flex: 1; min-width: 300px; text-align: center; }
+        .content-img img { width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
 
-        /* ✨ 采樂 AI 音樂顧問：完整版本 */
+        /* ✨ AI 懸浮按鈕與對話框 */
         .ai-floating-btn {
-            position: fixed; right: 26px; bottom: 26px; z-index: 1002;
-            width: 68px; height: 68px; border-radius: 50%; overflow: hidden;
-            cursor: pointer; border: 3px solid white; background: var(--primary-green);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.18); transition: transform 0.25s, box-shadow 0.25s;
+            position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            width: 65px; height: 65px; background: var(--primary-green);
+            border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s; border: 2px solid white; overflow: hidden;
         }
-        .ai-floating-btn:hover { transform: scale(1.08); box-shadow: 0 12px 28px rgba(0,0,0,0.24); }
-        .ai-floating-btn img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
+        .ai-floating-btn img { width: 100%; height: 100%; object-fit: cover; }
+        .ai-floating-btn:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(144, 203, 170, 0.6); }
+        
         .ai-chat-box {
-            position: fixed; right: 28px; bottom: 102px; z-index: 1001;
-            width: 330px; height: 430px; max-height: calc(100vh - 130px);
-            background: rgba(255,255,255,0.98); border: 1px solid rgba(144,203,170,0.45);
-            border-radius: 22px; box-shadow: 0 16px 40px rgba(0,0,0,0.16);
-            display: none; flex-direction: column; overflow: hidden;
+            position: fixed; bottom: 110px; right: 30px; z-index: 1000;
+            width: 360px; height: 500px; background: white; border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: none;
+            flex-direction: column; overflow: hidden; border: 1px solid var(--light-green);
         }
-        .ai-chat-box.show { display: flex; }
-
         .ai-chat-header {
-            background: linear-gradient(135deg, #8fc7a8, #a5c8b7);
-            color: white; padding: 14px 16px; font-weight: 900; font-size: 1rem;
-            display: flex; align-items: center; justify-content: space-between;
+            background: var(--primary-green); color: white; padding: 15px;
+            font-weight: bold; text-align: center; display: flex; justify-content: space-between;
         }
-        .close-chat {
-            width: 28px; height: 28px; border: 0; background: transparent; color: white;
-            font-size: 1.35rem; cursor: pointer; line-height: 1; padding: 0;
+        .close-chat { cursor: pointer; font-size: 1.2rem; }
+
+        .ai-feature-toggle {
+            background: var(--light-green); color: var(--primary-green);
+            font-size: 0.9rem; font-weight: bold; text-align: center;
+            padding: 8px; cursor: pointer; display: flex; justify-content: center;
+            align-items: center; gap: 5px; border-bottom: 1px solid #eee; transition: background 0.2s;
         }
-        .ai-chat-menu {
-            background: #f7fbf8; padding: 10px 12px 8px; border-bottom: 1px solid #edf2ee;
+        .ai-feature-toggle:hover { background: #d0ebd9; }
+        
+        .ai-feature-panel {
+            display: flex; flex-direction: column; gap: 8px; padding: 15px;
+            background: var(--bg-cream); border-bottom: 1px solid #eee;
+            transition: max-height 0.4s ease, padding 0.4s ease, opacity 0.3s ease;
+            max-height: 200px; opacity: 1; overflow: hidden;
         }
-        .menu-toggle {
-            width: 100%; border: 0; background: transparent; color: #6fa58a; font-weight: 900;
-            cursor: pointer; font-size: 0.92rem; padding: 3px 0 8px;
+        .ai-feature-panel.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom: none; }
+        
+        .feature-chip {
+            background: var(--warm-wood); color: white; border: none;
+            padding: 10px 15px; border-radius: 30px; font-size: 0.95rem;
+            font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3);
         }
-        .quick-menu { display: flex; flex-direction: column; gap: 7px; }
-        .quick-menu.collapsed { display: none; }
-        .quick-action {
-            border: 0; background: #d6aa76; color: white; border-radius: 999px; padding: 10px 12px;
-            font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(212,163,115,0.22);
-            transition: transform 0.2s, background 0.2s;
-        }
-        .quick-action:hover { transform: translateY(-1px); background: #c6955f; }
+        .feature-chip:hover { background: #b88a5d; transform: translateY(-2px); }
 
         .ai-chat-messages {
-            flex: 1; min-height: 0; padding: 14px; overflow-y: auto; background: var(--bg-cream);
-            display: flex; flex-direction: column; gap: 10px; font-size: 0.96rem;
+            flex: 1; padding: 15px; overflow-y: auto; background: white;
+            display: flex; flex-direction: column; gap: 10px; font-size: 1rem;
         }
-        .chat-msg {
-            padding: 10px 13px; border-radius: 14px; max-width: 82%; line-height: 1.55;
-            word-break: break-word;
-        }
-        .msg-user {
-            background: var(--light-green); color: var(--text-main); align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-        .msg-ai {
-            background: white; color: var(--text-main); align-self: flex-start;
-            border: 1px solid #e6e2de; border-bottom-left-radius: 4px;
-        }
-        .ai-chat-input {
-            display: flex; align-items: center; gap: 8px; padding: 10px;
-            border-top: 1px solid #eee; background: white;
-        }
-        .ai-chat-input input {
-            flex: 1; min-width: 0; padding: 10px 13px; border: 1px solid #ddd;
-            border-radius: 20px; outline: none; font-family: inherit;
-        }
+        .chat-msg { padding: 12px 15px; border-radius: 15px; max-width: 80%; line-height: 1.5; word-break: break-word; }
+        .msg-user { background: var(--light-green); color: var(--text-main); align-self: flex-end; border-bottom-right-radius: 5px; }
+        .msg-ai { background: var(--bg-cream); color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #eee; }
+        
+        .ai-chat-input { display: flex; padding: 10px; border-top: 1px solid #eee; background: white; }
+        .ai-chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; }
         .ai-chat-input button {
-            background: var(--warm-wood); color: white; border: none; padding: 10px 15px;
-            border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s;
+            background: var(--warm-wood); color: white; border: none; padding: 0 20px;
+            margin-left: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
+
+        .vision-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; display: none; transition: 0.3s; }
+
+        .ai-vision-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10001; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; flex-direction: column; align-items: center; width: 90vw; max-width: 640px; border: 4px solid var(--primary-green); }
+        .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
+        .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
+        .camera-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 4/3; }
+        #poseVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #poseCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+        .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
 
         footer {
             background-color: var(--light-green);
-            background-image: url('images/xinzhuang-footer-bg.webp');
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
+            background: url('images/xinzhuang-footer-bg.webp') center center / cover no-repeat;
             padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;
             border-top: 5px dashed var(--primary-green);
         }
@@ -185,13 +232,16 @@
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.2rem; }
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
             .logo img { height: 75px; }
             .piano-menu { width: 100%; padding-bottom: 10px; }
-            .tool-container { padding: 30px 20px; }
-            .metronome-display { font-size: 3.4rem; }
-            .ai-chat-box { right: 12px; bottom: 92px; width: calc(100vw - 24px); height: min(430px, calc(100vh - 112px)); }
-            .ai-floating-btn { right: 16px; bottom: 16px; width: 62px; height: 62px; }
+            .content-split { padding: 25px; }
+            .hero {
+                -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
+                mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
+            }
+            .ai-chat-box { width: 90vw; right: 5vw; }
         }
     </style>
 </head>
@@ -207,69 +257,138 @@
             <a href="teachers.html" class="piano-key">師資團隊</a>
             <a href="courses.html" class="piano-key">音樂課程</a>
             <a href="gallery.html" class="piano-key">展演舞台</a>
-            <a href="practice.html" class="piano-key active">音樂工具箱</a>
+            <a href="practice.html" class="piano-key">音樂工具箱</a>
         </nav>
     </header>
 
-    <section class="page-hero">
-        <img src="images/why-choose-aikomusic-hero.webp" alt="采樂線上練琴室" class="page-hero-img">
-        <div class="page-hero-overlay"></div>
-        <div class="page-hero-content">
-            <h1>線上練琴室</h1>
-            <p>Web Audio AI Practice Tools</p>
+    <section id="hero" class="hero">
+        <video class="hero-video" autoplay loop muted playsinline poster="images/xinzhuang-cello-piano-lessons-hero.webp">
+            <source src="" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>讓音樂，成為生活最美的陪伴</h1>
+            <p>新莊在地質感音樂空間・成人與學童的藝術啟蒙</p>
+            <a href="#courses" class="btn-cute">探索課程 🎵</a>
         </div>
     </section>
 
-    <section class="section-box">
-        <div class="tool-container">
-            <h2 class="tool-title">🎙️ Web Audio 智慧聽音雷達</h2>
-            <p class="tool-subtitle">開啟麥克風，讓網頁即時「看見」您的大提琴與鋼琴音波</p>
-            <div class="status-badge" id="micStatus">麥克風未開啟</div>
-            <canvas id="audioCanvas"></canvas>
-            <div class="controls">
-                <button class="btn-action btn-mic" id="micBtn">🎤 啟動聽音分析</button>
+    <section id="features" class="section-box">
+        <h2 class="sec-title">為什麼選擇采樂？</h2>
+        <p class="sec-subtitle">從硬體到教學，充滿溫度的學習環境</p>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <img src="images/xinzhuang-cello-one-on-one-teaching.webp" alt="新莊大提琴課程免帶樂器">
+                <h3>大提琴免帶來上課</h3>
+                <p>體貼學生與家長，教室備有各尺寸大提琴，來上課不用再辛苦揹著笨重的樂器囉！</p>
             </div>
-        </div>
-
-        <div class="tool-container">
-            <h2 class="tool-title">🎵 視覺化智慧節拍器</h2>
-            <p class="tool-subtitle">精準音訊合成、視覺閃爍，您隨身的節奏好幫手</p>
-            <div class="visual-beat" id="beatIndicator"></div>
-            <div class="metronome-display"><span id="bpmValue">90</span> BPM</div>
-            <input type="range" id="bpmSlider" class="bpm-slider" min="40" max="220" value="90">
-            <div class="controls">
-                <button class="btn-action" id="playBtn">▶ 開始播放</button>
+            <div class="feature-card">
+                <img src="images/xinzhuang-piano-lessons-environment.webp" alt="新莊鋼琴課程合法空間">
+                <h3>合法安全學習空間</h3>
+                <p>提供明亮舒適的學習空間，且每年通過✅公共安全檢查與消防安全檢測，給孩子與家長最安心的環境。</p>
+            </div>
+            <div class="feature-card">
+                <img src="images/xinzhuang-music-class-stage.webp" alt="音樂教學發表舞台">
+                <h3>專屬的閃耀舞台</h3>
+                <p>不定期舉辦年度師生音樂會與大合奏，讓大家都能在舞台上建立自信！</p>
             </div>
         </div>
     </section>
 
-    <!-- ✨ 完整版：采樂 AI 音樂顧問 -->
-    <div class="ai-floating-btn" id="aiBtn" title="呼叫 采樂 AI 音樂顧問" aria-label="開啟采樂 AI 音樂顧問">
-        <img src="images/ai-teacher.png" alt="AI 音樂顧問">
+    <section id="teachers" class="section-box">
+        <h2 class="sec-title">專業師資與特色課程</h2>
+        <p class="sec-subtitle">超過十年教學經驗，帶領您愛上音樂</p>
+        <div class="content-split">
+            <div class="content-text">
+                <h3>👑 Teacher Irene (鋼琴教學)</h3>
+                <ul>
+                    <li>國立中山大學音樂學系 鋼琴演奏學士</li>
+                    <li>國立台灣師範大學表演藝術 鋼琴合作碩士</li>
+                    <li>美國 Music Together 國際授證教師</li>
+                    <li>專業音樂與鋼琴師資認證</li>
+                    <li>致力深耕鋼琴教學與藝術潛能開發</li>
+                </ul>
+            </div>
+            <div class="content-img">
+                <img src="images/xinzhuang-teacher-irene-profile.webp" alt="新莊鋼琴老師 Teacher Irene">
+            </div>
+        </div>
+        <div id="courses" class="content-split">
+            <div class="content-text">
+                <h3>🏆 音樂升學與檢定輔導</h3>
+                <p>針對有志於音樂專業發展或目標檢定的學生，提供客製化專業指導：</p>
+                <ul>
+                    <li><strong>準備升學考：</strong>針對準備升國小、升國中音樂班的學生，提供扎實的術科與演奏技巧指導。</li>
+                    <li><strong>音樂檢定考試：</strong>輔導各項國內外專業音樂檢定，幫助學生設定目標並建立成就感。</li>
+                    <li><strong>全方位培訓：</strong>除了主副修樂器，亦針對樂理、聽寫及視唱提供系統化的專業培訓。</li>
+                </ul>
+            </div>
+            <div class="content-img">
+                <img src="images/xinzhuang-music-exam-prep.webp" alt="新莊音樂升學與檢定考試輔導">
+            </div>
+        </div>
+        <div class="content-split">
+            <div class="content-text">
+                <h3>🎻 專業器樂一對一教學</h3>
+                <p>無論是學童啟蒙，或是成人下班後的圓夢計畫，采樂都歡迎您！</p>
+                <ul>
+                    <li><strong>弦樂教學：</strong>大提琴、中提琴、小提琴</li>
+                    <li><strong>鍵盤與撥弦：</strong>古典鋼琴、吉他、烏克麗麗</li>
+                    <li><strong>成人專區：</strong>零基礎也能輕鬆上手，下班後的最佳舒壓活動</li>
+                </ul>
+            </div>
+            <div class="content-img">
+                <img src="images/xinzhuang-adult-cello-piano-lessons.webp" alt="新莊大提琴一對一教學">
+            </div>
+        </div>
+    </section>
+
+    <!-- ✨ AI 網頁練琴輔助工具 -->
+    <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
+        <img src="images/ai-teacher.png" alt="AI 音樂老師">
     </div>
-
-    <section class="ai-chat-box" id="aiChatBox" aria-label="采樂 AI 音樂顧問">
+    
+    <div class="ai-chat-box" id="aiChatBox">
         <div class="ai-chat-header">
             <span>✨ 采樂 AI 音樂顧問</span>
-            <button class="close-chat" id="closeAiChat" aria-label="關閉 AI 顧問">✕</button>
+            <span class="close-chat" id="closeAiChat">✖</span>
         </div>
-
-        <div class="ai-chat-menu">
-            <button class="menu-toggle" id="menuToggle">✨ 展開科技工具 ▼</button>
-            <div class="quick-menu" id="quickMenu">
-                <button class="quick-action" id="aiResearchBtn">📚 啟動 AI 琴史與研究分析</button>
-            </div>
+        
+        <div class="ai-feature-toggle" id="featureToggleBtn">
+            <span id="toggleText">✨ 展開黑科技工具箱</span>
+            <span id="toggleIcon">▼</span>
+        </div>
+        <div class="ai-feature-panel" id="aiFeaturePanel">
+            <button class="feature-chip" id="startVisionBtn">📷 啟 budding AI 琴姿與骨架分析</button>
         </div>
 
         <div class="ai-chat-messages" id="chatMessages">
-            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以問我音樂學習、課程、練琴方法，或直接使用上方 AI 科技工具！</div>
+            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以點擊上方按鈕喚醒黑科技，或是直接輸入問題問我喔！</div>
         </div>
-
         <div class="ai-chat-input">
             <input type="text" id="chatInput" placeholder="請輸入問題...">
             <button id="sendChat">發送</button>
         </div>
-    </section>
+    </div>
+
+    <!-- ✅ 全螢幕霧化背景 -->
+    <div class="vision-overlay" id="visionOverlay"></div>
+
+    <!-- 📷 視覺 AI 專屬彈出視窗 -->
+    <div class="ai-vision-modal" id="visionModal">
+        <div class="vision-header">
+            <span>📷 AI 琴姿骨架捕捉系統</span>
+            <span class="vision-close" id="closeVisionModal">×</span>
+        </div>
+        <div class="camera-box">
+            <div class="loading-text" id="visionLoading">模型載入中，請允許鏡頭權限...</div>
+            <video id="poseVideo" autoplay playsinline muted></video>
+            <canvas id="poseCanvas"></canvas>
+        </div>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: left; line-height: 1.6;">
+            此系統可輔助「鋼琴」與「提琴」的姿態檢視。請將設備放穩，讓鏡頭清楚拍攝到您的<b>「上半身與雙手」</b>。<br>系統將即時畫出關節連線，協助您檢視肩膀是否放鬆、手腕有無塌陷等演奏姿勢。<b>若姿勢不良（如手腕過低），連線將變為 <span style="color:#E74C3C;">紅色</span> 警示！</b>
+        </p>
+    </div>
 
     <footer id="contact">
         <div class="footer-info">
@@ -278,11 +397,9 @@
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
         </div>
-
         <div class="footer-map">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
         </div>
-
         <div class="footer-info">
             <h3 style="margin-bottom: 20px;">追蹤我們的日常</h3>
             <p><a href="https://www.facebook.com/aikomusic2" target="_blank" style="font-weight: bold; color: #2d734b;">👉 Facebook 粉絲專頁</a></p>
@@ -291,269 +408,106 @@
     </footer>
 
     <script>
-        // ==========================================
-        // 1. Web Audio 智慧聽音分析
-        // ==========================================
-        let audioAnalyzerCtx;
-        let analyser;
-        let microphoneStream;
-        let isListening = false;
+        const featureToggleBtn = document.getElementById('featureToggleBtn');
+        const aiFeaturePanel = document.getElementById('aiFeaturePanel');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const chatInput = document.getElementById('chatInput');
 
-        const micBtn = document.getElementById('micBtn');
-        const micStatus = document.getElementById('micStatus');
-        const canvas = document.getElementById('audioCanvas');
-        const canvasCtx = canvas.getContext('2d');
+        function collapsePanel() { aiFeaturePanel.classList.add('collapsed'); toggleIcon.innerText = '▼'; }
+        function expandPanel() { aiFeaturePanel.classList.remove('collapsed'); toggleIcon.innerText = '▲'; }
 
-        function resizeCanvas() {
-            canvas.width = canvas.offsetWidth * 2;
-            canvas.height = canvas.offsetHeight * 2;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        micBtn.addEventListener('click', async () => {
-            if (isListening) {
-                microphoneStream.getTracks().forEach(track => track.stop());
-                if (audioAnalyzerCtx && audioAnalyzerCtx.state !== 'closed') audioAnalyzerCtx.close();
-                isListening = false;
-                micBtn.innerText = '🎤 啟動聽音分析';
-                micBtn.classList.remove('active');
-                micStatus.innerText = '麥克風已關閉';
-                micStatus.classList.remove('listening');
-                canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-                return;
-            }
-
-            try {
-                audioAnalyzerCtx = new (window.AudioContext || window.webkitAudioContext)();
-                microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const source = audioAnalyzerCtx.createMediaStreamSource(microphoneStream);
-                analyser = audioAnalyzerCtx.createAnalyser();
-                analyser.fftSize = 2048;
-                source.connect(analyser);
-
-                isListening = true;
-                micBtn.innerText = '⏹ 停止收音';
-                micBtn.classList.add('active');
-                micStatus.innerText = '正在接收您的琴音...';
-                micStatus.classList.add('listening');
-                drawWaveform();
-            } catch (err) {
-                alert('啟動失敗！請確認瀏覽器已允許麥克風權限。');
-            }
+        featureToggleBtn.addEventListener('click', () => {
+            if (aiFeaturePanel.classList.contains('collapsed')) { expandPanel(); } else { collapsePanel(); }
         });
+        chatInput.addEventListener('focus', () => { collapsePanel(); });
 
-        function drawWaveform() {
-            if (!isListening || !analyser) return;
-            requestAnimationFrame(drawWaveform);
-
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteTimeDomainData(dataArray);
-
-            canvasCtx.fillStyle = '#222';
-            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-            canvasCtx.lineWidth = 4;
-            canvasCtx.strokeStyle = '#90CBAA';
-            canvasCtx.beginPath();
-
-            const sliceWidth = canvas.width / bufferLength;
-            let x = 0;
-            for (let i = 0; i < bufferLength; i++) {
-                const v = dataArray[i] / 128.0;
-                const y = v * (canvas.height / 2);
-                if (i === 0) canvasCtx.moveTo(x, y);
-                else canvasCtx.lineTo(x, y);
-                x += sliceWidth;
-            }
-            canvasCtx.lineTo(canvas.width, canvas.height / 2);
-            canvasCtx.stroke();
-        }
-
-        // ==========================================
-        // 2. Web Audio API 智慧節拍器
-        // ==========================================
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let isPlaying = false;
-        let nextNoteTime = 0.0;
-        let current16thNote = 0;
-        let timerID;
-
-        const bpmSlider = document.getElementById('bpmSlider');
-        const bpmValue = document.getElementById('bpmValue');
-        const playBtn = document.getElementById('playBtn');
-        const beatIndicator = document.getElementById('beatIndicator');
-
-        bpmSlider.addEventListener('input', function() {
-            bpmValue.innerText = this.value;
-        });
-
-        function nextNote() {
-            const secondsPerBeat = 60.0 / bpmSlider.value;
-            nextNoteTime += secondsPerBeat;
-            current16thNote++;
-            if (current16thNote === 4) current16thNote = 0;
-        }
-
-        function playNote(time) {
-            const osc = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            osc.frequency.value = (current16thNote === 0) ? 1200.0 : 800.0;
-            gainNode.gain.setValueAtTime(1, time);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
-
-            osc.start(time);
-            osc.stop(time + 0.1);
-
-            const timeToWait = Math.max(0, (time - audioContext.currentTime) * 1000);
-            setTimeout(() => {
-                beatIndicator.classList.add('active');
-                if (current16thNote === 0) {
-                    beatIndicator.style.backgroundColor = '#D4A373';
-                    beatIndicator.style.boxShadow = '0 0 20px #D4A373';
-                } else {
-                    beatIndicator.style.backgroundColor = '#90CBAA';
-                    beatIndicator.style.boxShadow = '0 0 20px #90CBAA';
-                }
-                setTimeout(() => beatIndicator.classList.remove('active'), 150);
-            }, timeToWait);
-        }
-
-        function scheduler() {
-            while (isPlaying && nextNoteTime < audioContext.currentTime + 0.1) {
-                playNote(nextNoteTime);
-                nextNote();
-            }
-            if (isPlaying) timerID = window.setTimeout(scheduler, 25);
-        }
-
-        playBtn.addEventListener('click', async () => {
-            if (audioContext.state === 'suspended') await audioContext.resume();
-            isPlaying = !isPlaying;
-
-            if (isPlaying) {
-                current16thNote = 0;
-                nextNoteTime = audioContext.currentTime + 0.05;
-                scheduler();
-                playBtn.innerText = '⏸ 停止播放';
-                playBtn.classList.add('active');
-            } else {
-                clearTimeout(timerID);
-                playBtn.innerText = '▶ 開始播放';
-                playBtn.classList.remove('active');
-            }
-        });
-
-        // ==========================================
-        // 3. ✨ 采樂 AI 音樂顧問：完整客服 + 科技工具
-        // ==========================================
         const aiBtn = document.getElementById('aiBtn');
         const aiChatBox = document.getElementById('aiChatBox');
         const closeAiChat = document.getElementById('closeAiChat');
         const sendChat = document.getElementById('sendChat');
-        const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
-        const menuToggle = document.getElementById('menuToggle');
-        const quickMenu = document.getElementById('quickMenu');
-        const aiResearchBtn = document.getElementById('aiResearchBtn');
-        const aiComposeBtn = document.getElementById('aiComposeBtn');
 
         let currentAudio = null;
 
-        function openAiChat() {
-            aiChatBox.classList.add('show');
-            setTimeout(() => chatInput.focus(), 100);
-        }
-
-        function closeAiChatBox() {
-            aiChatBox.classList.remove('show');
-            if (currentAudio) {
-                currentAudio.pause();
-                currentAudio.currentTime = 0;
-            }
-        }
-
-        aiBtn.addEventListener('click', () => {
-            aiChatBox.classList.contains('show') ? closeAiChatBox() : openAiChat();
-        });
-
-        closeAiChat.addEventListener('click', closeAiChatBox);
-
-        menuToggle.addEventListener('click', () => {
-            quickMenu.classList.toggle('collapsed');
-            menuToggle.textContent = quickMenu.classList.contains('collapsed')
-                ? '✨ 展開科技工具 ▼'
-                : '✨ 展開科技工具 ▲';
-        });
-
-        aiResearchBtn.addEventListener('click', () => {
-            openAiChat();
-            sendPresetMessage('我想請你幫我進行琴史、作曲家或音樂作品的研究分析。');
-        });
-
-        aiComposeBtn.addEventListener('click', () => {
-            openAiChat();
-            sendPresetMessage('我想獲得 AI 練琴指導與伴奏建議，請依照我的學習需求協助我。');
-        });
-
-        async function sendPresetMessage(message) {
-            chatInput.value = message;
-            await sendMessage();
-        }
+        aiBtn.addEventListener('click', () => { aiChatBox.style.display = aiChatBox.style.display === 'flex' ? 'none' : 'flex'; });
+        closeAiChat.addEventListener('click', () => { aiChatBox.style.display = 'none'; if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; } });
 
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
-
-            appendMessage(message, 'msg-user');
-            chatInput.value = '';
-            sendChat.disabled = true;
-            const loadingId = appendMessage('AI 顧問思考中...', 'msg-ai');
-
+            appendMessage(message, 'msg-user'); chatInput.value = '';
+            const loadingId = appendMessage('老師思考中...', 'msg-ai');
             try {
                 const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message })
                 });
-
                 const data = await response.json();
-                const loadingMessage = document.getElementById(loadingId);
-                if (loadingMessage) {
-                    loadingMessage.innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
-                }
-
-                if (currentAudio) currentAudio.pause();
-                if (data.audio) {
-                    currentAudio = new Audio('data:audio/mp3;base64,' + data.audio);
-                    currentAudio.play().catch(() => {});
-                }
-            } catch (error) {
-                const loadingMessage = document.getElementById(loadingId);
-                if (loadingMessage) loadingMessage.innerText = '連線失敗，請檢查網路狀態。';
-            } finally {
-                sendChat.disabled = false;
-                chatInput.focus();
-            }
+                document.getElementById(loadingId).innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
+                if (currentAudio) { currentAudio.pause(); }
+                if (data.audio) { currentAudio = new Audio("data:audio/mp3;base64," + data.audio); currentAudio.play(); }
+            } catch (error) { document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。'; }
         }
 
         sendChat.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.isComposing) sendMessage();
-        });
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
         function appendMessage(text, className) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `chat-msg ${className}`;
-            msgDiv.innerText = text;
-            const id = 'msg-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
-            msgDiv.id = id;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return id;
+            const msgDiv = document.createElement('div'); msgDiv.className = `chat-msg ${className}`; msgDiv.innerText = text;
+            const uniqueRandomId = Math.floor(Math.random() * 100000); msgDiv.id = 'msg-' + Date.now() + '-' + uniqueRandomId;
+            chatMessages.appendChild(msgDiv); chatMessages.scrollTop = chatMessages.scrollHeight; return msgDiv.id;
+        }
+
+        // ==========================================
+        // 黑科技 1：AI 琴姿骨架捕捉
+        // ==========================================
+        const startVisionBtn = document.getElementById('startVisionBtn'); const visionModal = document.getElementById('visionModal');
+        const visionOverlay = document.getElementById('visionOverlay'); const closeVisionModal = document.getElementById('closeVisionModal');
+        const pVideo = document.getElementById('poseVideo'); const pCanvas = document.getElementById('poseCanvas'); const pCtx = pCanvas.getContext('2d');
+        const vLoading = document.getElementById('visionLoading');
+        let poseDetector = null; let poseRunning = false;
+
+        startVisionBtn.addEventListener('click', async () => {
+            aiChatBox.style.display = 'none'; visionOverlay.style.display = 'block'; visionModal.style.display = 'flex'; vLoading.style.display = 'block';
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true }); pVideo.srcObject = stream;
+                pVideo.onloadedmetadata = async () => {
+                    pCanvas.width = pVideo.videoWidth; pCanvas.height = pVideo.videoHeight; vLoading.style.display = 'none';
+                    if (!poseDetector) { poseDetector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }); }
+                    poseRunning = true; runPoseDetection();
+                };
+            } catch (err) { vLoading.innerText = '無法存取鏡頭，請檢查您的瀏覽器權限設定。'; }
+        });
+
+        closeVisionModal.addEventListener('click', () => {
+            visionModal.style.display = 'none'; visionOverlay.style.display = 'none'; poseRunning = false;
+            if (pVideo.srcObject) { pVideo.srcObject.getTracks().forEach(track => track.stop()); }
+            aiChatBox.style.display = 'flex'; 
+        });
+
+        async function runPoseDetection() {
+            if (!poseRunning) return;
+            const poses = await poseDetector.estimatePoses(pVideo); pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            if (poses.length > 0) {
+                const kp = poses[0].keypoints; pCtx.lineWidth = 4;
+                const edges = [[5,7],[7,9],[6,8],[8,10],[5,6],[5,11],[6,12],[11,12],[11,13],[13,15],[12,14],[14,16]];
+                edges.forEach(e => {
+                    const p1 = kp[e[0]]; const p2 = kp[e[1]];
+                    if (p1.score > 0.3 && p2.score > 0.3) {
+                        let isBadPosture = false;
+                        if ((e[0] === 7 && e[1] === 9) || (e[0] === 9 && e[1] === 7)) { let wrist = e[0] === 9 ? p1 : p2; let elbow = e[0] === 7 ? p1 : p2; if (wrist.y > elbow.y + 15) isBadPosture = true; }
+                        if ((e[0] === 8 && e[1] === 10) || (e[0] === 10 && e[1] === 8)) { let wrist = e[0] === 10 ? p1 : p2; let elbow = e[0] === 8 ? p1 : p2; if (wrist.y > elbow.y + 15) isBadPosture = true; }
+                        pCtx.strokeStyle = isBadPosture ? "var(--alert-red)" : "var(--primary-green)";
+                        pCtx.beginPath(); pCtx.moveTo(p1.x, p1.y); pCtx.lineTo(p2.x, p2.y); pCtx.stroke();
+                    }
+                });
+                kp.forEach(point => {
+                    if (point.score > 0.3) {
+                        pCtx.beginPath(); pCtx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                        pCtx.fillStyle = "var(--warm-wood)"; pCtx.fill(); pCtx.strokeStyle = "white"; pCtx.lineWidth = 2; pCtx.stroke();
+                    }
+                });
+            }
+            requestAnimationFrame(runPoseDetection);
         }
     </script>
 </body>
