@@ -195,7 +195,7 @@
 
     </section>
 
-    <!-- ✨ AI 網頁練琴輔助工具 (客服大腦) -->
+    <!-- ✨ AI 網頁練琴輔助工具 -->
     <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
         <img src="images/ai-teacher.png" alt="AI 音樂老師">
     </div>
@@ -205,16 +205,60 @@
             <span>✨ 采樂 AI 音樂顧問</span>
             <span class="close-chat" id="closeAiChat">✖</span>
         </div>
+        
+        <div class="ai-feature-toggle" id="featureToggleBtn">
+            <span id="toggleText">✨ 展開黑科技工具箱</span>
+            <span id="toggleIcon">▼</span>
+        </div>
+        <div class="ai-feature-panel" id="aiFeaturePanel">
+            <button class="feature-chip" id="startVisionBtn">📷 啟動 AI 琴姿與骨架分析</button>
+            <button class="feature-chip" id="startOmrBtn">🎼 AI 拍譜轉伴奏</button>
+        </div>
+
         <div class="ai-chat-messages" id="chatMessages">
-            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。如果您對剛才的「聽音雷達」或練琴有疑問，都可以問我喔！</div>
+            <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以點擊上方按鈕喚醒黑科技，或是直接輸入問題問我喔！</div>
         </div>
         <div class="ai-chat-input">
-            <input type="text" id="chatInput" placeholder="請輸入問題，例如：大提琴怎麼調音？">
+            <input type="text" id="chatInput" placeholder="請輸入問題...">
             <button id="sendChat">發送</button>
         </div>
     </div>
 
-    <!-- 📌 完整補回的溫暖頁尾 (三欄式：資訊 + 地圖 + 社群) -->
+    <!-- ✅ 全螢幕霧化背景 -->
+    <div class="vision-overlay" id="visionOverlay"></div>
+
+    <!-- 📷 視覺 AI 專屬彈出視窗 -->
+    <div class="ai-vision-modal" id="visionModal">
+        <div class="vision-header">
+            <span>📷 AI 琴姿骨架捕捉系統</span>
+            <span class="vision-close" id="closeVisionModal">×</span>
+        </div>
+        <div class="camera-box">
+            <div class="loading-text" id="visionLoading">模型載入中，請允許鏡頭權限...</div>
+            <video id="poseVideo" autoplay playsinline muted></video>
+            <canvas id="poseCanvas"></canvas>
+        </div>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: left; line-height: 1.6;">
+            此系統可輔助「鋼琴」與「提琴」的姿態檢視。請將設備放穩，讓鏡頭清楚拍攝到您的<b>「上半身與雙手」</b>。<br>系統將即時畫出關節連線，協助您檢視肩膀是否放鬆、手腕有無塌陷等演奏姿勢。<b>若姿勢不良（如手腕過低），連線將變為 <span style="color:#E74C3C;">紅色</span> 警示！</b>
+        </p>
+    </div>
+
+    <!-- 🎼 AI 拍譜掃描儀專屬彈出視窗 -->
+    <div class="ai-vision-modal" id="omrModal">
+        <div class="vision-header">
+            <span>🎼 AI 拍譜分析儀</span>
+            <span class="vision-close" id="closeOmrModal">×</span>
+        </div>
+        <div class="camera-box" id="omrCameraBox">
+            <div class="loading-text" id="omrLoading">相機啟動中...</div>
+            <video id="omrVideo" autoplay playsinline muted></video>
+            <canvas id="omrCanvas"></canvas>
+            <div class="scanner-laser"></div>
+        </div>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將鏡頭對準樂譜（最好畫面清晰明亮），點擊下方按鈕進行 AI 深度視覺掃描。</p>
+        <button class="btn-cute" id="captureOmrBtn" style="width: 100%; margin-top: 10px; background: #D4A373; font-size: 1rem; border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold;">📸 拍下樂譜並分析</button>
+    </div>
+
     <footer id="contact">
         <div class="footer-info">
             <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo"> 采樂音樂教室</h3>
@@ -222,12 +266,9 @@
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
         </div>
-        
-        <!-- 這是剛剛遺漏的地圖區塊！ -->
         <div class="footer-map">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
         </div>
-
         <div class="footer-info">
             <h3 style="margin-bottom: 20px;">追蹤我們的日常</h3>
             <p><a href="https://www.facebook.com/aikomusic2" target="_blank" style="font-weight: bold; color: #2d734b;">👉 Facebook 粉絲專頁</a></p>
@@ -236,217 +277,235 @@
     </footer>
 
     <script>
-        // ==========================================
-        // 1. 黑科技：Web Audio 智慧聽音分析 (AnalyserNode)
-        // ==========================================
-        let audioAnalyzerCtx;
-        let analyser;
-        let microphoneStream;
-        let isListening = false;
-        
-        const micBtn = document.getElementById('micBtn');
-        const micStatus = document.getElementById('micStatus');
-        const canvas = document.getElementById('audioCanvas');
-        const canvasCtx = canvas.getContext('2d');
-        
-        canvas.width = canvas.offsetWidth * 2;
-        canvas.height = canvas.offsetHeight * 2;
+        const featureToggleBtn = document.getElementById('featureToggleBtn');
+        const aiFeaturePanel = document.getElementById('aiFeaturePanel');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const chatInput = document.getElementById('chatInput');
 
-        micBtn.addEventListener('click', async () => {
-            if (isListening) {
-                microphoneStream.getTracks().forEach(track => track.stop());
-                audioAnalyzerCtx.close();
-                isListening = false;
-                micBtn.innerText = '🎤 啟動聽音分析';
-                micBtn.classList.remove('active');
-                micStatus.innerText = '麥克風已關閉';
-                micStatus.classList.remove('listening');
-                canvasCtx.clearRect(0, 0, canvas.width, canvas.height); 
-                return;
-            }
+        function collapsePanel() { aiFeaturePanel.classList.add('collapsed'); toggleIcon.innerText = '▼'; }
+        function expandPanel() { aiFeaturePanel.classList.remove('collapsed'); toggleIcon.innerText = '▲'; }
 
-            try {
-                audioAnalyzerCtx = new (window.AudioContext || window.webkitAudioContext)();
-                microphoneStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const source = audioAnalyzerCtx.createMediaStreamSource(microphoneStream);
-                
-                analyser = audioAnalyzerCtx.createAnalyser();
-                analyser.fftSize = 2048; 
-                source.connect(analyser); 
-                
-                isListening = true;
-                micBtn.innerText = '⏹ 停止收音';
-                micBtn.classList.add('active');
-                micStatus.innerText = '正在接收您的琴音...';
-                micStatus.classList.add('listening');
-                
-                drawWaveform(); 
-            } catch (err) {
-                alert("啟動失敗！請確認瀏覽器已允許麥克風權限。");
-            }
+        featureToggleBtn.addEventListener('click', () => {
+            if (aiFeaturePanel.classList.contains('collapsed')) { expandPanel(); } else { collapsePanel(); }
         });
+        chatInput.addEventListener('focus', () => { collapsePanel(); });
 
-        function drawWaveform() {
-            if (!isListening) return;
-            requestAnimationFrame(drawWaveform);
-            
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteTimeDomainData(dataArray);
-
-            canvasCtx.fillStyle = '#222';
-            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-            canvasCtx.lineWidth = 4;
-            canvasCtx.strokeStyle = '#90CBAA'; 
-            canvasCtx.beginPath();
-
-            const sliceWidth = canvas.width * 1.0 / bufferLength;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                const v = dataArray[i] / 128.0;
-                const y = v * (canvas.height / 2);
-
-                if (i === 0) { canvasCtx.moveTo(x, y); } 
-                else { canvasCtx.lineTo(x, y); }
-                x += sliceWidth;
-            }
-
-            canvasCtx.lineTo(canvas.width, canvas.height / 2);
-            canvasCtx.stroke();
-        }
-
-        // ==========================================
-        // 2. Web Audio API 智慧節拍器邏輯
-        // ==========================================
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let isPlaying = false;
-        let nextNoteTime = 0.0;
-        let current16thNote = 0;
-        let timerID;
-        
-        const bpmSlider = document.getElementById('bpmSlider');
-        const bpmValue = document.getElementById('bpmValue');
-        const playBtn = document.getElementById('playBtn');
-        const beatIndicator = document.getElementById('beatIndicator');
-
-        bpmSlider.addEventListener('input', function() { bpmValue.innerText = this.value; });
-
-        function nextNote() {
-            const secondsPerBeat = 60.0 / bpmSlider.value;
-            nextNoteTime += secondsPerBeat;
-            current16thNote++;
-            if (current16thNote === 4) { current16thNote = 0; }
-        }
-
-        function playNote(time) {
-            const osc = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            osc.frequency.value = (current16thNote === 0) ? 1200.0 : 800.0;
-            gainNode.gain.setValueAtTime(1, time);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
-            
-            osc.start(time);
-            osc.stop(time + 0.1);
-
-            const timeToWait = (time - audioContext.currentTime) * 1000;
-            setTimeout(() => {
-                beatIndicator.classList.add('active');
-                if(current16thNote === 0) { beatIndicator.style.backgroundColor = '#D4A373'; beatIndicator.style.boxShadow = '0 0 20px #D4A373'; } 
-                else { beatIndicator.style.backgroundColor = '#90CBAA'; beatIndicator.style.boxShadow = '0 0 20px #90CBAA'; }
-                setTimeout(() => { beatIndicator.classList.remove('active'); }, 150);
-            }, timeToWait > 0 ? timeToWait : 0);
-        }
-
-        function scheduler() {
-            while (nextNoteTime < audioContext.currentTime + 0.1) {
-                playNote(nextNoteTime);
-                nextNote();
-            }
-            timerID = window.setTimeout(scheduler, 25.0);
-        }
-
-        playBtn.addEventListener('click', () => {
-            if (audioContext.state === 'suspended') { audioContext.resume(); } 
-            
-            isPlaying = !isPlaying;
-            if (isPlaying) {
-                current16thNote = 0;
-                nextNoteTime = audioContext.currentTime + 0.05;
-                scheduler();
-                playBtn.innerText = '⏸ 停止播放';
-                playBtn.classList.add('active');
-            } else {
-                window.clearTimeout(timerID);
-                playBtn.innerText = '▶ 開始播放';
-                playBtn.classList.remove('active');
-            }
-        });
-
-        // ==========================================
-        // 3. AI 語音客服腳本
-        // ==========================================
         const aiBtn = document.getElementById('aiBtn');
         const aiChatBox = document.getElementById('aiChatBox');
         const closeAiChat = document.getElementById('closeAiChat');
         const sendChat = document.getElementById('sendChat');
-        const chatInput = document.getElementById('chatInput');
         const chatMessages = document.getElementById('chatMessages');
 
         let currentAudio = null;
 
         aiBtn.addEventListener('click', () => { aiChatBox.style.display = aiChatBox.style.display === 'flex' ? 'none' : 'flex'; });
-        closeAiChat.addEventListener('click', () => { 
-            aiChatBox.style.display = 'none'; 
-            if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
-        });
+        closeAiChat.addEventListener('click', () => { aiChatBox.style.display = 'none'; if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; } });
 
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
-
-            appendMessage(message, 'msg-user');
-            chatInput.value = '';
+            appendMessage(message, 'msg-user'); chatInput.value = '';
             const loadingId = appendMessage('老師思考中...', 'msg-ai');
-
             try {
                 const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message })
                 });
                 const data = await response.json();
-                
                 document.getElementById(loadingId).innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
-                
                 if (currentAudio) { currentAudio.pause(); }
-                if (data.audio) {
-                    currentAudio = new Audio("data:audio/mp3;base64," + data.audio);
-                    currentAudio.play();
-                }
-            } catch (error) {
-                document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。';
-            }
+                if (data.audio) { currentAudio = new Audio("data:audio/mp3;base64," + data.audio); currentAudio.play(); }
+            } catch (error) { document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。'; }
         }
 
         sendChat.addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
         function appendMessage(text, className) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `chat-msg ${className}`;
-            msgDiv.innerText = text;
-            const uniqueRandomId = Math.floor(Math.random() * 100000);
-            const id = 'msg-' + Date.now() + '-' + uniqueRandomId;
-            msgDiv.id = id;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return id;
+            const msgDiv = document.createElement('div'); msgDiv.className = `chat-msg ${className}`; msgDiv.innerText = text;
+            const uniqueRandomId = Math.floor(Math.random() * 100000); msgDiv.id = 'msg-' + Date.now() + '-' + uniqueRandomId;
+            chatMessages.appendChild(msgDiv); chatMessages.scrollTop = chatMessages.scrollHeight; return msgDiv.id;
         }
+
+        // ==========================================
+        // 黑科技 1：AI 琴姿骨架捕捉
+        // ==========================================
+        const startVisionBtn = document.getElementById('startVisionBtn'); const visionModal = document.getElementById('visionModal');
+        const visionOverlay = document.getElementById('visionOverlay'); const closeVisionModal = document.getElementById('closeVisionModal');
+        const pVideo = document.getElementById('poseVideo'); const pCanvas = document.getElementById('poseCanvas'); const pCtx = pCanvas.getContext('2d');
+        const vLoading = document.getElementById('visionLoading');
+        let poseDetector = null; let poseRunning = false;
+
+        startVisionBtn.addEventListener('click', async () => {
+            aiChatBox.style.display = 'none'; visionOverlay.style.display = 'block'; visionModal.style.display = 'flex'; vLoading.style.display = 'block';
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true }); pVideo.srcObject = stream;
+                pVideo.onloadedmetadata = async () => {
+                    pCanvas.width = pVideo.videoWidth; pCanvas.height = pVideo.videoHeight; vLoading.style.display = 'none';
+                    if (!poseDetector) { poseDetector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }); }
+                    poseRunning = true; runPoseDetection();
+                };
+            } catch (err) { vLoading.innerText = '無法存取鏡頭，請檢查您的瀏覽器權限設定。'; }
+        });
+
+        closeVisionModal.addEventListener('click', () => {
+            visionModal.style.display = 'none'; visionOverlay.style.display = 'none'; poseRunning = false;
+            if (pVideo.srcObject) { pVideo.srcObject.getTracks().forEach(track => track.stop()); }
+            aiChatBox.style.display = 'flex'; 
+        });
+
+        async function runPoseDetection() {
+            if (!poseRunning) return;
+            const poses = await poseDetector.estimatePoses(pVideo); pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            if (poses.length > 0) {
+                const kp = poses[0].keypoints; pCtx.lineWidth = 4;
+                const edges = [[5,7],[7,9],[6,8],[8,10],[5,6],[5,11],[6,12],[11,12],[11,13],[13,15],[12,14],[14,16]];
+                edges.forEach(e => {
+                    const p1 = kp[e[0]]; const p2 = kp[e[1]];
+                    if (p1.score > 0.3 && p2.score > 0.3) {
+                        let isBadPosture = false;
+                        if ((e[0] === 7 && e[1] === 9) || (e[0] === 9 && e[1] === 7)) { let wrist = e[0] === 9 ? p1 : p2; let elbow = e[0] === 7 ? p1 : p2; if (wrist.y > elbow.y + 15) isBadPosture = true; }
+                        if ((e[0] === 8 && e[1] === 10) || (e[0] === 10 && e[1] === 8)) { let wrist = e[0] === 10 ? p1 : p2; let elbow = e[0] === 8 ? p1 : p2; if (wrist.y > elbow.y + 15) isBadPosture = true; }
+                        pCtx.strokeStyle = isBadPosture ? "var(--alert-red)" : "var(--primary-green)";
+                        pCtx.beginPath(); pCtx.moveTo(p1.x, p1.y); pCtx.lineTo(p2.x, p2.y); pCtx.stroke();
+                    }
+                });
+                kp.forEach(point => {
+                    if (point.score > 0.3) {
+                        pCtx.beginPath(); pCtx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                        pCtx.fillStyle = "var(--warm-wood)"; pCtx.fill(); pCtx.strokeStyle = "white"; pCtx.lineWidth = 2; pCtx.stroke();
+                    }
+                });
+            }
+            requestAnimationFrame(runPoseDetection);
+        }
+
+        // ==========================================
+        // 4. 黑科技 2 & 3：拍譜轉伴奏 + 動態合奏 (含智慧壓縮與循環)
+        // ==========================================
+        const startOmrBtn = document.getElementById('startOmrBtn'); const omrModal = document.getElementById('omrModal');
+        const closeOmrModal = document.getElementById('closeOmrModal'); const omrVideo = document.getElementById('omrVideo');
+        const omrCanvas = document.getElementById('omrCanvas'); const omrCtx = omrCanvas.getContext('2d');
+        const omrCameraBox = document.getElementById('omrCameraBox'); const captureOmrBtn = document.getElementById('captureOmrBtn');
+        const startSynthBtn = document.getElementById('startSynthBtn');
+        
+        startOmrBtn.addEventListener('click', async () => {
+            aiChatBox.style.display = 'none'; visionOverlay.style.display = 'block'; omrModal.style.display = 'flex';
+            captureOmrBtn.innerText = '📸 拍下樂譜並分析'; captureOmrBtn.disabled = false; omrCameraBox.classList.remove('scanning');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); 
+                omrVideo.srcObject = stream; omrVideo.style.transform = "none"; omrCanvas.style.transform = "none";
+                document.getElementById('omrLoading').style.display = 'none';
+            } catch (err) { document.getElementById('omrLoading').innerText = '無法存取鏡頭'; }
+        });
+
+        closeOmrModal.addEventListener('click', () => {
+            omrModal.style.display = 'none'; visionOverlay.style.display = 'none'; omrCameraBox.classList.remove('scanning');
+            if (omrVideo.srcObject) { omrVideo.srcObject.getTracks().forEach(t => t.stop()); }
+            aiChatBox.style.display = 'flex';
+        });
+
+        captureOmrBtn.addEventListener('click', async () => {
+            if (!omrVideo.srcObject) return;
+            
+            // 擷取原始畫面
+            omrCanvas.width = omrVideo.videoWidth; 
+            omrCanvas.height = omrVideo.videoHeight;
+            omrCtx.drawImage(omrVideo, 0, 0, omrCanvas.width, omrCanvas.height);
+            omrVideo.srcObject.getTracks().forEach(t => t.stop());
+            
+            omrCameraBox.classList.add('scanning');
+            captureOmrBtn.innerText = '⏳ 正在傳送至 AI 視覺大腦解析中...'; 
+            captureOmrBtn.disabled = true;
+
+            // ✅ 智慧壓縮技術：將手機 4K 畫面等比例縮小至最大 1024 寬度，避免上傳檔案過大當機
+            const MAX_WIDTH = 1024;
+            let scaleSize = 1;
+            if (omrCanvas.width > MAX_WIDTH) {
+                scaleSize = MAX_WIDTH / omrCanvas.width;
+            }
+            const scaledCanvas = document.createElement('canvas');
+            scaledCanvas.width = omrCanvas.width * scaleSize;
+            scaledCanvas.height = omrCanvas.height * scaleSize;
+            const scaledCtx = scaledCanvas.getContext('2d');
+            scaledCtx.drawImage(omrCanvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
+
+            // 使用壓縮後的圖片轉 Base64
+            const base64Image = scaledCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+
+            try {
+                const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-omr', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image })
+                });
+                const data = await response.json();
+
+                omrModal.style.display = 'none'; visionOverlay.style.display = 'none';
+                omrCameraBox.classList.remove('scanning'); aiChatBox.style.display = 'flex';
+
+                window.lastDetectedChords = data.chords;
+                
+                if (data.chords.includes("無法辨識")) {
+                    appendMessage(`🎼 由於樂譜不夠清晰，視覺大腦無法精準讀取。但我已為您載入預設的示範和弦循環！您可以點擊「動態合奏」試聽！`, 'msg-ai');
+                } else {
+                    appendMessage(`🎼 分析完成！這份樂譜的和弦是：【${data.chords}】。我已經為您解鎖了「動態合奏」功能！`, 'msg-ai');
+                }
+
+                startSynthBtn.classList.remove('disabled');
+                startSynthBtn.classList.add('highlight');
+                startSynthBtn.innerText = '🎻 播放 AI 動態伴奏';
+
+            } catch (err) {
+                captureOmrBtn.innerText = '❌ 解析失敗，請重試'; captureOmrBtn.disabled = false; omrCameraBox.classList.remove('scanning');
+            }
+        });
+
+        startSynthBtn.addEventListener('click', async function() {
+            if(this.classList.contains('disabled')) return;
+            if(!window.lastDetectedChords) return;
+
+            // ✅ 強制喚醒 Apple iOS 的聲音
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') { await audioCtx.resume(); }
+
+            let matches = window.lastDetectedChords.match(/[A-G][b#]?[m]?[7]?/g);
+            if (!matches || matches.length === 0) { matches = ['C', 'G', 'Am', 'F']; }
+
+            appendMessage('🎵 伴奏生成中...（系統將為您循環播放 4 次），請跟著節奏一起練習吧！', 'msg-ai');
+            this.innerText = '🎵 伴奏播放中...'; 
+            this.classList.remove('highlight');
+
+            const chordMap = {
+                'C': [261.63, 329.63, 392.00], 'Cm': [261.63, 311.13, 392.00], 'Cm7': [261.63, 311.13, 392.00, 466.16],
+                'D': [293.66, 369.99, 440.00], 'Dm': [293.66, 349.23, 440.00],
+                'E': [329.63, 415.30, 493.88], 'Em': [329.63, 392.00, 493.88],
+                'F': [349.23, 440.00, 523.25], 'Fm': [349.23, 415.30, 523.25],
+                'G': [392.00, 493.88, 587.33], 'Gm': [392.00, 466.16, 587.33],
+                'A': [440.00, 554.37, 659.25], 'Am': [440.00, 523.25, 659.25],
+                'B': [493.88, 622.25, 739.99], 'Bb': [466.16, 587.33, 698.46], 'Bm': [493.88, 587.33, 739.99]
+            };
+
+            // ✅ 循環 4 次
+            const playSequence = [...matches, ...matches, ...matches, ...matches];
+
+            for (let chord of playSequence) {
+                const freqs = chordMap[chord] || chordMap['C'];
+                freqs.forEach(freq => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); 
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+                    osc.start(audioCtx.currentTime); 
+                    osc.stop(audioCtx.currentTime + 1.5);
+                });
+                await new Promise(r => setTimeout(r, 1500)); 
+            }
+
+            this.innerText = '🎻 再聽一次伴奏';
+        });
     </script>
 </body>
 </html>
