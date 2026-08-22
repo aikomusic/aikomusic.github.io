@@ -118,8 +118,8 @@
         .feature-chip { background: var(--warm-wood); color: white; border: none; padding: 10px 15px; border-radius: 30px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3); }
         .feature-chip:hover { background: #b88a5d; transform: translateY(-2px); }
         .feature-chip.disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
-
-        /* 📸 新增：動態合奏解鎖按鈕特效 */
+        
+        /* 亮燈特效 */
         .feature-chip.highlight { background: #E74C3C; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
 
@@ -139,7 +139,7 @@
             z-index: 10000; display: none; transition: 0.3s;
         }
 
-        /* 📷 視覺 AI 專屬彈出視窗 (修正 z-index 浮在霧化背景之上) */
+        /* 📷 視覺 AI 專屬彈出視窗 */
         .ai-vision-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10001; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; flex-direction: column; align-items: center; width: 90vw; max-width: 640px; border: 4px solid var(--primary-green); }
         .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
         .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
@@ -148,7 +148,7 @@
         #poseCanvas, #omrCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
         .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
 
-        /* 📸 新增：掃描特效 (OMR 專用) */
+        /* 📸 雷射掃描特效 */
         .scanner-laser { position: absolute; width: 100%; height: 4px; background: var(--alert-red); box-shadow: 0 0 15px var(--alert-red); top: 0; left: 0; display: none; z-index: 5; }
         .scanning .scanner-laser { display: block; animation: scanAnim 2s infinite linear; }
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
@@ -293,11 +293,8 @@
             <span id="toggleIcon">▼</span>
         </div>
         <div class="ai-feature-panel" id="aiFeaturePanel">
-            <!-- ✅ 第一科：琴姿捕捉 -->
             <button class="feature-chip" id="startVisionBtn">📷 啟動 AI 琴姿與骨架分析</button>
-            <!-- ✅ 第二科：拍譜轉伴奏解鎖 -->
             <button class="feature-chip" id="startOmrBtn">🎼 AI 拍譜轉伴奏</button>
-            <!-- ✅ 第三科：動態合奏 (預設鎖住，拍完譜才解鎖發光) -->
             <button class="feature-chip disabled" id="startSynthBtn">🎻 動態合奏 (請先拍譜解鎖)</button>
         </div>
 
@@ -329,7 +326,7 @@
         </p>
     </div>
 
-    <!-- 🎼 AI 拍譜掃描儀專屬彈出視窗 -->
+    <!-- 🎼 AI 拍譜掃描儀專屬彈出視窗 (修正說明文字) -->
     <div class="ai-vision-modal" id="omrModal">
         <div class="vision-header">
             <span>🎼 AI 拍譜分析儀</span>
@@ -341,7 +338,7 @@
             <canvas id="omrCanvas"></canvas>
             <div class="scanner-laser"></div> <!-- 超酷雷射特效 -->
         </div>
-        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將鏡頭對準樂譜（需包含和弦），點擊下方按鈕進行 AI 深度視覺掃描。</p>
+        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將鏡頭對準樂譜（<b>最好上面寫有 C, G, Am 等和弦</b>），點擊下方按鈕進行 AI 深度視覺掃描。</p>
         <button class="btn-cute" id="captureOmrBtn" style="width: 100%; margin-top: 10px; background: #D4A373; font-size: 1rem; border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold;">📸 拍下樂譜並分析</button>
     </div>
 
@@ -614,13 +611,13 @@
             omrVideo.srcObject.getTracks().forEach(t => t.stop());
             
             omrCameraBox.classList.add('scanning');
-            captureOmrBtn.innerText = '⏳ 正在傳送至 Gemini 大腦解析中...'; 
+            // ✅ 修改文字：拿掉 Gemini，改為 AI 視覺大腦
+            captureOmrBtn.innerText = '⏳ 正在傳送至 AI 視覺大腦解析中...'; 
             captureOmrBtn.disabled = true;
 
             const base64Image = omrCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
 
             try {
-                // 呼叫您建好的 PHP 視覺 API
                 const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-omr', {
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' },
@@ -634,7 +631,13 @@
                 aiChatBox.style.display = 'flex';
 
                 window.lastDetectedChords = data.chords;
-                appendMessage(`🎼 分析完成！這份樂譜的和弦是：【${data.chords}】。我已經為您解鎖了「動態合奏」功能！`, 'msg-ai');
+                
+                // ✅ 備援機制：如果後端讀取失敗或回傳「無法辨識」
+                if (data.chords.includes("無法辨識")) {
+                    appendMessage(`🎼 由於樂譜不夠清晰或連線限制，視覺大腦無法精準讀取。但我已為您載入預設的示範和弦循環！您可以點擊「動態合奏」試聽！`, 'msg-ai');
+                } else {
+                    appendMessage(`🎼 分析完成！這份樂譜的和弦是：【${data.chords}】。我已經為您解鎖了「動態合奏」功能！`, 'msg-ai');
+                }
 
                 // 解鎖第三顆按鈕
                 startSynthBtn.classList.remove('disabled');
@@ -653,27 +656,40 @@
             if(this.classList.contains('disabled')) return;
             if(!window.lastDetectedChords) return;
 
-            appendMessage('🎵 正在為您生成伴奏音軌，請跟著節奏一起練習吧！', 'msg-ai');
+            // ✅ 修正 Apple Safari/iOS 無聲音的問題：必須在點擊事件中 resume
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
+
+            // 抓取出字串中的和弦
+            let matches = window.lastDetectedChords.match(/[A-G][b#]?[m]?[7]?/g);
+            
+            // ✅ 如果完全抓不到和弦，直接給一組超好聽的預設循環
+            if (!matches || matches.length === 0) {
+                matches = ['C', 'G', 'Am', 'F'];
+            }
+
+            appendMessage('🎵 伴奏生成中...（系統將為您循環播放 2 次），請跟著節奏一起練習吧！', 'msg-ai');
             this.innerText = '🎵 伴奏播放中...'; 
             this.classList.remove('highlight');
 
             // 基礎和弦頻率對照表
             const chordMap = {
-                'C': [261.63, 329.63, 392.00], 'Cm': [261.63, 311.13, 392.00],
-                'D': [293.66, 369.99, 440.00], 'Dm': [293.66, 349.23, 440.00],
+                'C': [261.63, 329.63, 392.00], 'Cm': [261.63, 311.13, 392.00], 'Cm7': [261.63, 311.13, 392.00, 466.16],
+                'D': [293.66, 369.99, 440.00], 'Dm': [293.66, 349.23, 440.00], 'D.S.': [293.66, 349.23, 440.00], // 防誤判
                 'E': [329.63, 415.30, 493.88], 'Em': [329.63, 392.00, 493.88],
                 'F': [349.23, 440.00, 523.25], 'Fm': [349.23, 415.30, 523.25],
                 'G': [392.00, 493.88, 587.33], 'Gm': [392.00, 466.16, 587.33],
                 'A': [440.00, 554.37, 659.25], 'Am': [440.00, 523.25, 659.25],
-                'B': [493.88, 622.25, 739.99], 'Bm': [493.88, 587.33, 739.99]
+                'B': [493.88, 622.25, 739.99], 'Bb': [466.16, 587.33, 698.46], 'Bm': [493.88, 587.33, 739.99]
             };
 
-            // 抓取出字串中的和弦
-            const matches = window.lastDetectedChords.match(/[A-G][m]?/g) || ['C', 'G', 'Am', 'F'];
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            // ✅ 將抓到的和弦陣列複製一遍，變成循環播放 2 次！
+            const playSequence = [...matches, ...matches];
 
-            for (let chord of matches) {
-                const freqs = chordMap[chord] || chordMap['C'];
+            for (let chord of playSequence) {
+                const freqs = chordMap[chord] || chordMap['C']; // 若遇到奇怪的字，預設彈C
                 freqs.forEach(freq => {
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
