@@ -117,9 +117,6 @@
         .ai-feature-panel.collapsed { max-height: 0; padding-top: 0; padding-bottom: 0; opacity: 0; border-bottom: none; }
         .feature-chip { background: var(--warm-wood); color: white; border: none; padding: 10px 15px; border-radius: 30px; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(212, 163, 115, 0.3); }
         .feature-chip:hover { background: #b88a5d; transform: translateY(-2px); }
-        .feature-chip.disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
-        .feature-chip.highlight { background: #E74C3C; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
 
         .ai-chat-messages { flex: 1; padding: 15px; overflow-y: auto; background: white; display: flex; flex-direction: column; gap: 10px; font-size: 1rem; }
         .chat-msg { padding: 12px 15px; border-radius: 15px; max-width: 80%; line-height: 1.5; word-break: break-word; }
@@ -136,30 +133,9 @@
         .vision-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--primary-green); font-weight: bold; font-size: 1.2rem; }
         .vision-close { cursor: pointer; color: #888; font-size: 1.5rem; }
         .camera-box { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; aspect-ratio: 4/3; }
-        #poseVideo, #omrVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        #poseCanvas, #omrCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
+        #poseVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #poseCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: scaleX(-1); }
         .loading-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; z-index: 1; pointer-events: none; }
-
-        .scanner-laser { position: absolute; width: 100%; height: 4px; background: var(--alert-red); box-shadow: 0 0 15px var(--alert-red); top: 0; left: 0; display: none; z-index: 5; }
-        .scanning .scanner-laser { display: block; animation: scanAnim 2s infinite linear; }
-        @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
-
-        footer { background-color: var(--light-green); background: url('images/xinzhuang-footer-bg.webp') center center / cover no-repeat; padding: 60px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; border-top: 5px dashed var(--primary-green); }
-        .footer-info h3 { color: var(--primary-green); font-size: 1.5rem; display: flex; align-items: center; }
-        .footer-logo { height: 72px; margin-right: 16px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1)); }
-        .footer-info p { font-size: 1.1rem; line-height: 1.8; }
-        .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2.2rem; }
-            header { flex-direction: column; gap: 10px; padding-top: 15px; }
-            .logo img { height: 75px; }
-            .piano-menu { width: 100%; padding-bottom: 10px; }
-            .content-split { padding: 25px; }
-            .hero {
-                -webkit-mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
-                mask-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 350' preserveAspectRatio='none'%3E%3Cpath d='M0,0 L1200,0 L1200,320 C850,335 550,305 300,320 C160,330 70,325 0,318 Z' fill='black'/%3E%3C/svg%3E");
-            }
 
         @media (max-width: 768px) {
             .page-hero-content h1 { font-size: 2.2rem; }
@@ -167,9 +143,7 @@
             .logo img { height: 75px; }
             .piano-menu { width: 100%; padding-bottom: 10px; }
             .article-box { padding: 30px 20px; }
-            
-.ai-chat-box { width: 90vw; right: 5vw; }
-
+            .ai-chat-box { width: 90vw; right: 5vw; }
         }
     </style>
 </head>
@@ -209,7 +183,6 @@
         <p class="sec-subtitle">戴上耳機，聆聽我們的專屬樂章 🎧</p>
 
         <div class="video-grid">
-            
             <div class="video-card">
                 <div class="video-wrapper">
                     <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1924208791436527%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
@@ -325,24 +298,8 @@
         </p>
     </div>
 
-    <!-- 🎼 AI 拍譜掃描儀專屬彈出視窗 -->
-    <div class="ai-vision-modal" id="omrModal">
-        <div class="vision-header">
-            <span>🎼 AI 拍譜分析儀</span>
-            <span class="vision-close" id="closeOmrModal">×</span>
-        </div>
-        <div class="camera-box" id="omrCameraBox">
-            <div class="loading-text" id="omrLoading">相機啟動中...</div>
-            <video id="omrVideo" autoplay playsinline muted></video>
-            <canvas id="omrCanvas"></canvas>
-            <div class="scanner-laser"></div>
-        </div>
-        <p style="margin-top: 15px; color: #8C7B70; font-size: 0.9rem; text-align: center;">請將鏡頭對準樂譜（最好畫面清晰明亮），點擊下方按鈕進行 AI 深度視覺掃描。</p>
-        <button class="btn-cute" id="captureOmrBtn" style="width: 100%; margin-top: 10px; background: #D4A373; font-size: 1rem; border: none; padding: 12px; border-radius: 10px; color: white; cursor: pointer; font-weight: bold;">📸 拍下樂譜並分析</button>
-    </div>
-
     <script>
-const featureToggleBtn = document.getElementById('featureToggleBtn');
+        const featureToggleBtn = document.getElementById('featureToggleBtn');
         const aiFeaturePanel = document.getElementById('aiFeaturePanel');
         const toggleIcon = document.getElementById('toggleIcon');
         const chatInput = document.getElementById('chatInput');
@@ -443,135 +400,6 @@ const featureToggleBtn = document.getElementById('featureToggleBtn');
             }
             requestAnimationFrame(runPoseDetection);
         }
-
-        // ==========================================
-        // 4. 黑科技 2 & 3：拍譜轉伴奏 + 動態合奏 (含智慧壓縮與循環)
-        // ==========================================
-        const startOmrBtn = document.getElementById('startOmrBtn'); const omrModal = document.getElementById('omrModal');
-        const closeOmrModal = document.getElementById('closeOmrModal'); const omrVideo = document.getElementById('omrVideo');
-        const omrCanvas = document.getElementById('omrCanvas'); const omrCtx = omrCanvas.getContext('2d');
-        const omrCameraBox = document.getElementById('omrCameraBox'); const captureOmrBtn = document.getElementById('captureOmrBtn');
-        const startSynthBtn = document.getElementById('startSynthBtn');
-        
-        startOmrBtn.addEventListener('click', async () => {
-            aiChatBox.style.display = 'none'; visionOverlay.style.display = 'block'; omrModal.style.display = 'flex';
-            captureOmrBtn.innerText = '📸 拍下樂譜並分析'; captureOmrBtn.disabled = false; omrCameraBox.classList.remove('scanning');
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }); 
-                omrVideo.srcObject = stream; omrVideo.style.transform = "none"; omrCanvas.style.transform = "none";
-                document.getElementById('omrLoading').style.display = 'none';
-            } catch (err) { document.getElementById('omrLoading').innerText = '無法存取鏡頭'; }
-        });
-
-        closeOmrModal.addEventListener('click', () => {
-            omrModal.style.display = 'none'; visionOverlay.style.display = 'none'; omrCameraBox.classList.remove('scanning');
-            if (omrVideo.srcObject) { omrVideo.srcObject.getTracks().forEach(t => t.stop()); }
-            aiChatBox.style.display = 'flex';
-        });
-
-        captureOmrBtn.addEventListener('click', async () => {
-            if (!omrVideo.srcObject) return;
-            
-            // 擷取原始畫面
-            omrCanvas.width = omrVideo.videoWidth; 
-            omrCanvas.height = omrVideo.videoHeight;
-            omrCtx.drawImage(omrVideo, 0, 0, omrCanvas.width, omrCanvas.height);
-            omrVideo.srcObject.getTracks().forEach(t => t.stop());
-            
-            omrCameraBox.classList.add('scanning');
-            captureOmrBtn.innerText = '⏳ 正在傳送至 AI 視覺大腦解析中...'; 
-            captureOmrBtn.disabled = true;
-
-            // ✅ 智慧壓縮技術：將手機 4K 畫面等比例縮小至最大 1024 寬度，避免上傳檔案過大當機
-            const MAX_WIDTH = 1024;
-            let scaleSize = 1;
-            if (omrCanvas.width > MAX_WIDTH) {
-                scaleSize = MAX_WIDTH / omrCanvas.width;
-            }
-            const scaledCanvas = document.createElement('canvas');
-            scaledCanvas.width = omrCanvas.width * scaleSize;
-            scaledCanvas.height = omrCanvas.height * scaleSize;
-            const scaledCtx = scaledCanvas.getContext('2d');
-            scaledCtx.drawImage(omrCanvas, 0, 0, scaledCanvas.width, scaledCanvas.height);
-
-            // 使用壓縮後的圖片轉 Base64
-            const base64Image = scaledCanvas.toDataURL('image/jpeg', 0.8).split(',')[1];
-
-            try {
-                const response = await fetch('https://onlovebox.com/wp-json/aikomusic/v1/ai-omr', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image: base64Image })
-                });
-                const data = await response.json();
-
-                omrModal.style.display = 'none'; visionOverlay.style.display = 'none';
-                omrCameraBox.classList.remove('scanning'); aiChatBox.style.display = 'flex';
-
-                window.lastDetectedChords = data.chords;
-                
-                if (data.chords.includes("無法辨識")) {
-                    appendMessage(`🎼 由於樂譜不夠清晰，視覺大腦無法精準讀取。但我已為您載入預設的示範和弦循環！您可以點擊「動態合奏」試聽！`, 'msg-ai');
-                } else {
-                    appendMessage(`🎼 分析完成！這份樂譜的和弦是：【${data.chords}】。我已經為您解鎖了「動態合奏」功能！`, 'msg-ai');
-                }
-
-                startSynthBtn.classList.remove('disabled');
-                startSynthBtn.classList.add('highlight');
-                startSynthBtn.innerText = '🎻 播放 AI 動態伴奏';
-
-            } catch (err) {
-                captureOmrBtn.innerText = '❌ 解析失敗，請重試'; captureOmrBtn.disabled = false; omrCameraBox.classList.remove('scanning');
-            }
-        });
-
-        startSynthBtn.addEventListener('click', async function() {
-            if(this.classList.contains('disabled')) return;
-            if(!window.lastDetectedChords) return;
-
-            // ✅ 強制喚醒 Apple iOS 的聲音
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') { await audioCtx.resume(); }
-
-            let matches = window.lastDetectedChords.match(/[A-G][b#]?[m]?[7]?/g);
-            if (!matches || matches.length === 0) { matches = ['C', 'G', 'Am', 'F']; }
-
-            appendMessage('🎵 伴奏生成中...（系統將為您循環播放 4 次），請跟著節奏一起練習吧！', 'msg-ai');
-            this.innerText = '🎵 伴奏播放中...'; 
-            this.classList.remove('highlight');
-
-            const chordMap = {
-                'C': [261.63, 329.63, 392.00], 'Cm': [261.63, 311.13, 392.00], 'Cm7': [261.63, 311.13, 392.00, 466.16],
-                'D': [293.66, 369.99, 440.00], 'Dm': [293.66, 349.23, 440.00],
-                'E': [329.63, 415.30, 493.88], 'Em': [329.63, 392.00, 493.88],
-                'F': [349.23, 440.00, 523.25], 'Fm': [349.23, 415.30, 523.25],
-                'G': [392.00, 493.88, 587.33], 'Gm': [392.00, 466.16, 587.33],
-                'A': [440.00, 554.37, 659.25], 'Am': [440.00, 523.25, 659.25],
-                'B': [493.88, 622.25, 739.99], 'Bb': [466.16, 587.33, 698.46], 'Bm': [493.88, 587.33, 739.99]
-            };
-
-            // ✅ 循環 4 次
-            const playSequence = [...matches, ...matches, ...matches, ...matches];
-
-            for (let chord of playSequence) {
-                const freqs = chordMap[chord] || chordMap['C'];
-                freqs.forEach(freq => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.connect(gain); 
-                    gain.connect(audioCtx.destination);
-                    osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-                    osc.start(audioCtx.currentTime); 
-                    osc.stop(audioCtx.currentTime + 1.5);
-                });
-                await new Promise(r => setTimeout(r, 1500)); 
-            }
-
-            this.innerText = '🎻 再聽一次伴奏';
-        });
-    
     </script>
 </body>
 </html>
