@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- 首頁 -->
+    <url>
+        <loc>https://aikomusic.github.io/</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://aikomusic.github.io/index.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <!-- 為何選采樂 -->
+    <url>
+        <loc>https://aikomusic.github.io/why-us.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <!-- 師資團隊 -->
+    <url>
+        <loc>https://aikomusic.github.io/teachers.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <!-- 音樂課程 -->
+    <url>
+        <loc>https://aikomusic.github.io/courses.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <!-- 展演舞台 -->
+    <url>
+        <loc>https://aikomusic.github.io/gallery.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <!-- 音樂工具箱 (線上練琴室) -->
+    <url>
+        <loc>https://aikomusic.github.io/practice.html</loc>
+        <lastmod>2026-08-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>
