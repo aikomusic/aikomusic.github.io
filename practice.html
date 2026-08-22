@@ -188,14 +188,24 @@
         .footer-info p { font-size: 1.1rem; line-height: 1.8; }
         .footer-map iframe { width: 100%; height: 220px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 🎧 古典聆賞室專屬樣式 */
+        /* 🎧 古典聆賞室專屬樣式 & 自訂客製化播放器 UI */
         .playlist-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; text-align: left; }
-        .track-item { display: flex; align-items: center; justify-content: space-between; background: var(--light-green); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(144, 203, 170, 0.3); transition: 0.3s; }
+        .track-item { display: flex; align-items: center; justify-content: space-between; background: var(--light-green); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(144, 203, 170, 0.3); transition: 0.3s; margin-top: 15px; }
         .track-item:hover { box-shadow: 0 4px 12px rgba(92, 77, 67, 0.1); transform: translateY(-2px); }
-        .track-info { display: flex; flex-direction: column; }
-        .track-name { font-weight: bold; color: var(--text-main); font-size: 1.1rem; }
+        .track-info { display: flex; flex-direction: column; width: 45%; }
+        .track-name { font-weight: bold; color: var(--text-main); font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .track-composer { font-size: 0.9rem; color: var(--text-light); }
-        audio { height: 40px; outline: none; }
+        
+        .custom-player-ui { display: flex; align-items: center; gap: 12px; flex: 1.2; justify-content: flex-end; max-width: 450px; }
+        .custom-play-btn { background: var(--warm-wood); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; font-size: 1rem; flex-shrink: 0; }
+        .custom-play-btn:hover { transform: scale(1.1); background: #b88a5d; }
+        .time-current, .time-duration { font-size: 0.85rem; color: var(--text-light); min-width: 35px; font-family: monospace; }
+        .time-current { text-align: right; }
+        .custom-progress { -webkit-appearance: none; appearance: none; flex: 1; height: 6px; background: #ddd; border-radius: 5px; outline: none; cursor: pointer; min-width: 80px; transition: background 0.1s; }
+        .custom-progress::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--primary-green); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .custom-loop-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; opacity: 0.4; transition: 0.3s; flex-shrink: 0; }
+        .custom-loop-btn:hover { opacity: 0.8; }
+        .custom-loop-btn.active { opacity: 1; filter: drop-shadow(0 0 3px var(--primary-green)); }
 
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 10px; padding-top: 15px; }
@@ -205,8 +215,9 @@
             .metronome-display { font-size: 3.4rem; }
             .ai-chat-box { width: 90vw; right: 5vw; }
             /* 🎧 手機版播放器適配 */
-            .track-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-            audio { width: 100%; }
+            .track-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .track-info { width: 100%; }
+            .custom-player-ui { width: 100%; max-width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
@@ -269,7 +280,6 @@
         "germany": {
             countryName: "德國", composer: "貝多芬",
             tracks: [
-                // 這裡更新了最穩定的維基連結，解決 0:00 的問題
                 { title: "月光奏鳴曲 第一樂章", src: "music/Beethoven - Moonlight Sonata (1st Movement).mp3" },
                 { title: "給愛麗絲 (Für Elise)", src: "music/Beethoven - Für Elise .mp3" }
             ]
@@ -284,7 +294,6 @@
         "china": {
             countryName: "中國", composer: "東方名曲",
             tracks: [
-                // 東方音樂無版權連結極少且易失效，這裡設定為您的空間路徑，請自行上傳 MP3 檔案
                 { title: "茉莉花 (江蘇民歌)", src: "music/molihua.mp3", note: "" },
                 { title: "高山流水 (古箏名曲)", src: "music/gaoshan.mp3", note: "" }
             ]
@@ -308,32 +317,91 @@
         
         data.tracks.forEach(track => {
             const trackDiv = document.createElement('div');
-            // 行內樣式確保不會跟您其他的 CSS 打架
-            trackDiv.style.cssText = "display: flex; align-items: center; justify-content: space-between; background: var(--light-green); padding: 15px 20px; border-radius: 12px; border: 1px solid rgba(144, 203, 170, 0.3); margin-top: 15px;";
+            trackDiv.className = 'track-item'; 
             
-            // 如果是需要自己上傳的東方音樂，顯示紅字提示給您看
             const hintHtml = track.note ? `<div style="font-size: 0.8rem; color: #E74C3C; margin-top: 5px; font-weight: bold;">${track.note}</div>` : '';
 
+            // 🔥 注入我們全新打造的客製化播放器 UI
             trackDiv.innerHTML = `
-                <div style="display: flex; flex-direction: column; text-align: left; max-width: 65%;">
-                    <span style="font-weight: bold; color: var(--text-main); font-size: 1.1rem;">${track.title}</span>
-                    <span style="font-size: 0.9rem; color: var(--text-light);">${data.countryName} | ${data.composer}</span>
+                <div class="track-info">
+                    <span class="track-name" title="${track.title}">${track.title}</span>
+                    <span class="track-composer">${data.countryName} | ${data.composer}</span>
                     ${hintHtml}
                 </div>
-                <audio controls controlsList="nodownload" style="height: 40px; outline: none; max-width: 120px;">
-                    <source src="${track.src}" type="audio/mpeg">
-                    <source src="${track.src}" type="audio/ogg">
-                </audio>
+                <div class="custom-player-ui">
+                    <audio src="${track.src}" preload="metadata"></audio>
+                    <button class="custom-play-btn" title="播放/暫停">▶</button>
+                    <span class="time-current">0:00</span>
+                    <input type="range" class="custom-progress" value="0" min="0" max="100" step="0.1">
+                    <span class="time-duration">0:00</span>
+                    <button class="custom-loop-btn" title="切換循環播放">🔁</button>
+                </div>
             `;
             
             const audioEl = trackDiv.querySelector('audio');
-            
-            // 貼心功能：點擊播放時，自動暫停上一首，避免兩首歌一起吵
-            audioEl.addEventListener('play', () => {
-                if(currentAudio && currentAudio !== audioEl) {
-                    currentAudio.pause();
+            const playBtn = trackDiv.querySelector('.custom-play-btn');
+            const progress = trackDiv.querySelector('.custom-progress');
+            const timeCurrent = trackDiv.querySelector('.time-current');
+            const timeDuration = trackDiv.querySelector('.time-duration');
+            const loopBtn = trackDiv.querySelector('.custom-loop-btn');
+
+            // 格式化時間 (mm:ss)
+            const formatTime = (time) => {
+                if (isNaN(time) || !isFinite(time)) return "0:00";
+                const m = Math.floor(time / 60);
+                const s = Math.floor(time % 60).toString().padStart(2, '0');
+                return `${m}:${s}`;
+            };
+
+            // 載入元數據後更新總時間
+            audioEl.addEventListener('loadedmetadata', () => {
+                timeDuration.textContent = formatTime(audioEl.duration);
+            });
+
+            // 播放/暫停按鈕
+            playBtn.addEventListener('click', () => {
+                if (audioEl.paused) {
+                    if(currentAudio && currentAudio !== audioEl) {
+                        currentAudio.pause();
+                        document.querySelectorAll('.custom-play-btn').forEach(btn => btn.textContent = '▶');
+                    }
+                    audioEl.play();
+                    playBtn.textContent = '⏸';
+                    currentAudio = audioEl;
+                } else {
+                    audioEl.pause();
+                    playBtn.textContent = '▶';
                 }
-                currentAudio = audioEl;
+            });
+
+            // 進度條與時間更新
+            audioEl.addEventListener('timeupdate', () => {
+                const percent = (audioEl.currentTime / audioEl.duration) * 100;
+                if (!isNaN(percent)) progress.value = percent;
+                timeCurrent.textContent = formatTime(audioEl.currentTime);
+                // 創造進度條填色效果
+                progress.style.background = `linear-gradient(to right, var(--primary-green) ${percent}%, #ddd ${percent}%)`;
+            });
+
+            // 拖曳進度條
+            progress.addEventListener('input', (e) => {
+                const time = (e.target.value / 100) * audioEl.duration;
+                audioEl.currentTime = time;
+            });
+
+            // 播放完畢處理
+            audioEl.addEventListener('ended', () => {
+                if (!audioEl.loop) {
+                    playBtn.textContent = '▶';
+                    progress.value = 0;
+                    progress.style.background = '#ddd';
+                }
+            });
+
+            // 循環播放按鈕
+            loopBtn.addEventListener('click', () => {
+                audioEl.loop = !audioEl.loop;
+                loopBtn.classList.toggle('active', audioEl.loop);
             });
 
             playlistContainer.appendChild(trackDiv);
@@ -631,10 +699,10 @@
         const sendChat = document.getElementById('sendChat');
         const chatMessages = document.getElementById('chatMessages');
 
-        let currentAudio = null;
+        let currentAiAudio = null; // 區分聊天語音跟播放器音樂的變數名稱避免衝突
 
         aiBtn.addEventListener('click', () => { aiChatBox.style.display = aiChatBox.style.display === 'flex' ? 'none' : 'flex'; });
-        closeAiChat.addEventListener('click', () => { aiChatBox.style.display = 'none'; if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; } });
+        closeAiChat.addEventListener('click', () => { aiChatBox.style.display = 'none'; if (currentAiAudio) { currentAiAudio.pause(); currentAiAudio.currentTime = 0; } });
 
         async function sendMessage() {
             const message = chatInput.value.trim();
@@ -653,8 +721,8 @@
                 
                 document.getElementById(loadingId).innerText = data.reply || '抱歉，網路有點卡頓，請再試一次。';
                 
-                if (currentAudio) { currentAudio.pause(); }
-                if (data.audio) { currentAudio = new Audio("data:audio/mp3;base64," + data.audio); currentAudio.play(); }
+                if (currentAiAudio) { currentAiAudio.pause(); }
+                if (data.audio) { currentAiAudio = new Audio("data:audio/mp3;base64," + data.audio); currentAiAudio.play(); }
             } catch (error) { 
                 document.getElementById(loadingId).innerText = '連線失敗，請檢查網路狀態。'; 
             }
