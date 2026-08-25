@@ -410,5 +410,22 @@
             requestAnimationFrame(runPoseDetection);
         }
     </script>
+<script>
+    // 讓手機版選單自動滾動到當前(active)標籤的位置
+    document.addEventListener("DOMContentLoaded", function() {
+        const activeKey = document.querySelector('.piano-key.active');
+        const menuContainer = document.querySelector('.piano-menu');
+        
+        if (activeKey && menuContainer) {
+            // 計算按鈕應該在容器中間的位置
+            const scrollLeftPos = activeKey.offsetLeft - (menuContainer.offsetWidth / 2) + (activeKey.offsetWidth / 2);
+            // 執行平滑滾動
+            menuContainer.scrollTo({
+                left: scrollLeftPos,
+                behavior: 'smooth'
+            });
+        }
+    });
+</script>
 </body>
 </html>
