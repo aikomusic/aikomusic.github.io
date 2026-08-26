@@ -1,38 +1,91 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
-    <title>采樂音樂教室 Aiko Music 最新消息</title>
+    <title>采樂音樂教室 Aiko Music</title>
     <link>https://aikomusic.github.io/</link>
-    <description>新莊專業大提琴與鋼琴一對一教學，掌握最新課程資訊與音樂會動態。</description>
+    <description>新莊專業大提琴與鋼琴一對一教學，掌握最新課程資訊、師資介紹與音樂會動態。</description>
     <language>zh-TW</language>
-    <lastBuildDate>Tue, 25 Aug 2026 12:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 27 Aug 2026 12:00:00 +0800</lastBuildDate>
     <atom:link href="https://aikomusic.github.io/rss.xml" rel="self" type="application/rss+xml" />
 
+    <!-- 1. 最新消息 -->
     <item>
-        <title>采樂快報：捕捉每一個跳動的音符</title>
+        <title>采樂快報：最新動態與日常點滴</title>
         <link>https://aikomusic.github.io/news.html</link>
         <description><![CDATA[學琴不只是一個人在琴房裡的苦練，更多的是與老師、同學們共享音樂帶來的喜悅。歡迎來到采樂最新消息專區，掌握最新的課程資訊、師生音樂會公告與溫馨的教室日常。]]></description>
-        <pubDate>Tue, 25 Aug 2026 10:00:00 +0800</pubDate>
+        <pubDate>Thu, 27 Aug 2026 10:00:00 +0800</pubDate>
         <guid isPermaLink="true">https://aikomusic.github.io/news.html</guid>
         <media:content url="https://aikomusic.github.io/images/news-hero-bg.webp" medium="image" />
     </item>
 
+    <!-- 2. 采樂相簿 -->
     <item>
-        <title>線上智慧練琴室全新上線</title>
+        <title>采樂音樂相簿：紀錄每一次的成長與感動</title>
+        <link>https://aikomusic.github.io/album.html</link>
+        <description><![CDATA[每一次登台都是勇氣的累積，每一張海報都是歲月的見證。收錄采樂歷年來師生音樂會的閃耀瞬間與歷屆音樂會紀念海報，見證學員在舞台上綻放的光芒。]]></description>
+        <pubDate>Wed, 26 Aug 2026 10:00:00 +0800</pubDate>
+        <guid isPermaLink="true">https://aikomusic.github.io/album.html</guid>
+        <media:content url="https://aikomusic.github.io/images/album-hero-bg.webp" medium="image" />
+    </item>
+
+    <!-- 3. 音樂工具箱 -->
+    <item>
+        <title>線上智慧練琴室與 AI 黑科技上線</title>
         <link>https://aikomusic.github.io/practice.html</link>
         <description><![CDATA[采樂專屬 Web Audio 練琴工具箱！包含跨國古典聆賞室、視覺化智慧節拍器與聽音雷達。更導入 AI 琴姿骨架捕捉系統，讓您的居家練習更專業。]]></description>
-        <pubDate>Mon, 24 Aug 2026 09:00:00 +0800</pubDate>
+        <pubDate>Tue, 25 Aug 2026 09:00:00 +0800</pubDate>
         <guid isPermaLink="true">https://aikomusic.github.io/practice.html</guid>
         <media:content url="https://aikomusic.github.io/images/why-choose-aikomusic-hero.webp" medium="image" />
     </item>
 
+    <!-- 4. 音樂課程 -->
     <item>
-        <title>音樂升學與檢定專業輔導</title>
+        <title>音樂升學與專業檢定輔導課程</title>
         <link>https://aikomusic.github.io/courses.html</link>
-        <description><![CDATA[針對有志於音樂專業發展的學生，提供客製化指導。包含準備升國小、國中音樂班，以及輔導國內外各項專業音樂檢定（如維也納音樂檢定），建立成就感。]]></description>
-        <pubDate>Sun, 23 Aug 2026 14:30:00 +0800</pubDate>
+        <description><![CDATA[針對有志於音樂專業發展的學生，提供客製化指導。包含準備升國小、國中音樂班，以及輔導國內外各項專業音樂檢定，建立絕對的音樂成就感。]]></description>
+        <pubDate>Mon, 24 Aug 2026 14:30:00 +0800</pubDate>
         <guid isPermaLink="true">https://aikomusic.github.io/courses.html</guid>
         <media:content url="https://aikomusic.github.io/images/xinzhuang-music-exam-prep.webp" medium="image" />
+    </item>
+
+    <!-- 5. 展演舞台 -->
+    <item>
+        <title>展演舞台：專屬你的閃耀時刻</title>
+        <link>https://aikomusic.github.io/gallery.html</link>
+        <description><![CDATA[學習音樂最好的成果展現，就是勇敢站上舞台！采樂音樂教室定期舉辦年度師生音樂會與大提琴、小提琴合奏，陪伴學童與成人學員建立無可取代的自信。]]></description>
+        <pubDate>Sun, 23 Aug 2026 11:00:00 +0800</pubDate>
+        <guid isPermaLink="true">https://aikomusic.github.io/gallery.html</guid>
+        <media:content url="https://aikomusic.github.io/images/gallery-hero-bg.webp" medium="image" />
+    </item>
+
+    <!-- 6. 師資團隊 -->
+    <item>
+        <title>采樂專業師資團隊介紹</title>
+        <link>https://aikomusic.github.io/teachers.html</link>
+        <description><![CDATA[超過十年教學經驗的頂尖師資團隊，具備國內外音樂系科班背景。從大提琴、小提琴到古典鋼琴，為不同年齡與程度的學員量身打造專屬的學習計畫。]]></description>
+        <pubDate>Sat, 22 Aug 2026 09:30:00 +0800</pubDate>
+        <guid isPermaLink="true">https://aikomusic.github.io/teachers.html</guid>
+        <media:content url="https://aikomusic.github.io/images/xinzhuang-teacher-irene-profile.webp" medium="image" />
+    </item>
+
+    <!-- 7. 為何選采樂 -->
+    <item>
+        <title>為何選擇采樂音樂教室？</title>
+        <link>https://aikomusic.github.io/why-us.html</link>
+        <description><![CDATA[我們提供新莊最安心的學習環境，每年通過公共與消防安全檢查。主打大提琴免帶樂器，無壓學習，給您最完善的音樂歷程與充滿溫度的藝術空間。]]></description>
+        <pubDate>Fri, 21 Aug 2026 15:00:00 +0800</pubDate>
+        <guid isPermaLink="true">https://aikomusic.github.io/why-us.html</guid>
+        <media:content url="https://aikomusic.github.io/images/why-choose-aikomusic-hero.webp" medium="image" />
+    </item>
+
+    <!-- 8. 首頁 -->
+    <item>
+        <title>采樂音樂教室 Aiko Music 官方網站</title>
+        <link>https://aikomusic.github.io/</link>
+        <description><![CDATA[讓音樂，成為生活最美的陪伴。位於新莊的采樂音樂教室提供專業大提琴與鋼琴一對一教學，無論是學童的藝術啟蒙，或是成人下班後的圓夢計畫，我們都為您敞開大門。]]></description>
+        <pubDate>Thu, 20 Aug 2026 08:00:00 +0800</pubDate>
+        <guid isPermaLink="true">https://aikomusic.github.io/index.html</guid>
+        <media:content url="https://aikomusic.github.io/images/xinzhuang-cello-piano-lessons-hero.webp" medium="image" />
     </item>
 
 </channel>
