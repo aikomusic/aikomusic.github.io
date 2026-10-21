@@ -6,12 +6,13 @@
     <title>線上練琴室 | 采樂音樂教室 Aiko Music - 智慧節拍器與聽音輔助</title>
     <link rel="icon" href="images/favicon.png" type="image/png">
     <meta name="description" content="采樂音樂教室專屬線上練琴室，提供網頁版智慧節拍器與AI聽音頻譜分析工具。幫助新莊大提琴與鋼琴學員在家也能擁有專業的節奏訓練環境。">
+    <link rel="canonical" href="https://aikomusic.github.io/practice.html">
+
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-
     <style>
         :root {
             --primary-green: #90CBAA;
@@ -46,7 +47,7 @@
             padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100;
         }
-        .logo img { height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+        .logo img { width: auto; max-width: 100%; height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
         .piano-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
         .piano-key {
             background: rgba(255, 255, 255, 0.9); border: 1px solid #e0e0e0; border-bottom: 6px solid #d0d0d0;
@@ -221,12 +222,13 @@
             .custom-player-ui { width: 100%; max-width: 100%; justify-content: space-between; }
         }
     </style>
+
 </head>
 <body>
 
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室"></a>
+            <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室" width="500" height="500"></a>
         </div>
         <nav class="piano-menu">
             <a href="index.html" class="piano-key">首頁</a>
@@ -240,8 +242,11 @@
         </nav>
     </header>
 
+<main>
+
+
     <section class="page-hero">
-        <img src="images/why-choose-aikomusic-hero.webp" alt="采樂線上練琴室" class="page-hero-img">
+        <img src="images/why-choose-aikomusic-hero.webp" alt="采樂線上練琴室" class="page-hero-img" width="2048" height="1365">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
             <h1>線上練琴室</h1>
@@ -335,7 +340,7 @@
                     <audio src="${track.src}" preload="metadata"></audio>
                     <button class="custom-play-btn" title="播放/暫停">▶</button>
                     <span class="time-current">0:00</span>
-                    <input type="range" class="custom-progress" value="0" min="0" max="100" step="0.1">
+                    <input type="range" class="custom-progress" value="0" min="0" max="100" step="0.1" aria-label="音樂工具控制">
                     <span class="time-duration">0:00</span>
                     <button class="custom-loop-btn" title="切換循環播放">🔁</button>
                 </div>
@@ -450,7 +455,7 @@
             <p class="tool-subtitle">精準音訊合成、視覺閃爍，您隨身的節奏好幫手</p>
             <div class="visual-beat" id="beatIndicator"></div>
             <div class="metronome-display"><span id="bpmValue">90</span> BPM</div>
-            <input type="range" id="bpmSlider" class="bpm-slider" min="40" max="220" value="90">
+            <input type="range" id="bpmSlider" class="bpm-slider" min="40" max="220" value="90" aria-label="節拍器速度">
             <div class="controls">
                 <button class="btn-action" id="playBtn">▶ 開始播放</button>
             </div>
@@ -458,8 +463,10 @@
     </section>
 
     <!-- ✨ 采樂 AI 音樂顧問 -->
-    <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
-        <img src="images/ai-teacher.png" alt="AI 音樂老師">
+    </main>
+
+<div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
+        <img src="images/ai-teacher.png" alt="AI 音樂老師" width="400" height="400" loading="lazy" decoding="async">
     </div>
     
     <div class="ai-chat-box" id="aiChatBox">
@@ -480,7 +487,7 @@
             <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以點擊上方按鈕喚醒黑科技，或是直接輸入問題問我喔！</div>
         </div>
         <div class="ai-chat-input">
-            <input type="text" id="chatInput" placeholder="請輸入問題...">
+            <input type="text" id="chatInput" placeholder="請輸入問題..." aria-label="輸入問題">
             <button id="sendChat">發送</button>
         </div>
     </div>
@@ -506,14 +513,14 @@
 
     <footer id="contact">
         <div class="footer-info">
-            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo"> 采樂音樂教室</h3>
+            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo" width="500" height="500" loading="lazy" decoding="async"> 采樂音樂教室</h3>
             <p>📍 新北市新莊區中榮街56巷2號2樓</p>
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
         </div>
 
         <div class="footer-map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;" title="采樂音樂教室 Google 地圖位置"></iframe>
         </div>
 
         <div class="footer-info">
