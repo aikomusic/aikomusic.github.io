@@ -255,7 +255,6 @@
             <script>
                 const galleryContainer = document.getElementById('galleryContainer');
                 
-                const brillianceImageDimensions = [[1365, 2048], [1365, 2048], [2048, 1365], [1365, 2048], [1706, 960], [1567, 1045], [2048, 1365], [1478, 1108], [2048, 1536], [1536, 2048], [1567, 1045], [1280, 960], [2048, 1365], [1365, 2048], [2048, 1365], [2048, 1365], [2048, 1536], [2048, 1365]];
 
                 // 動態生成光彩集 1~18
                 for(let i=1; i<=18; i++) {
@@ -263,7 +262,7 @@
                     const div = document.createElement('div');
                     div.className = 'masonry-item';
                     div.setAttribute('data-category', 'brilliance');
-                    div.innerHTML = `<img src="Brilliance/aikomusic${num}.webp" alt="采樂舞台閃耀瞬間 ${num}" loading="lazy" decoding="async" width="${brillianceImageDimensions[i - 1][0]}" height="${brillianceImageDimensions[i - 1][1]}">`;
+                    div.innerHTML = `<img src="Brilliance/aikomusic${num}.webp" alt="采樂舞台閃耀瞬間 ${num}" loading="lazy" decoding="async">`;
                     const galleryImage = div.querySelector('img');
                     galleryImage.addEventListener('error', () => {
                         if (galleryImage.dataset.fallbackAttempted) return;
@@ -281,14 +280,13 @@
                     "20251207", "20260628"
                 ];
                 
-                const posterImageDimensions = {"20180609": [1050, 750], "20190602": [1447, 2048], "20190609": [1447, 2048], "20191208": [1447, 2048], "20200621": [1313, 1838], "20201213": [1462, 2048], "20210704": [1000, 1400], "20211212": [875, 1225], "20220626": [1448, 2048], "20221204": [1448, 2048], "20230702": [1448, 2048], "20231210": [1448, 2048], "20240630": [1448, 2048], "20241222": [1448, 2048], "20250629": [1448, 2048], "20251207": [1448, 2048], "20260628": [1448, 2048]};
 
                 // 動態生成海報集
                 posterDates.forEach(date => {
                     const div = document.createElement('div');
                     div.className = 'masonry-item';
                     div.setAttribute('data-category', 'poster');
-                    div.innerHTML = `<img src="poster/${date}.webp" alt="采樂歷年音樂會 ${date}" loading="lazy" decoding="async" width="${posterImageDimensions[date][0]}" height="${posterImageDimensions[date][1]}">`;
+                    div.innerHTML = `<img src="poster/${date}.webp" alt="采樂歷年音樂會 ${date}" loading="lazy" decoding="async">`;
                     const posterImage = div.querySelector('img');
                     posterImage.addEventListener('error', () => {
                         if (posterImage.dataset.fallbackAttempted) return;
@@ -315,7 +313,7 @@
 
     <!-- ✨ 采樂 AI 音樂顧問 -->
     <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
-        <img src="images/ai-teacher.png" alt="AI 音樂老師" width="400" height="400" loading="lazy" decoding="async">
+        <img src="images/ai-teacher.png" alt="AI 音樂老師" loading="lazy" decoding="async" width="400" height="400">
     </div>
     
     <div class="ai-chat-box" id="aiChatBox">
@@ -362,7 +360,7 @@
 
     <footer id="contact">
         <div class="footer-info">
-            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo" width="500" height="500" loading="lazy" decoding="async"> 采樂音樂教室</h3>
+            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo" loading="lazy" decoding="async" height="500"> 采樂音樂教室</h3>
             <p>📍 新北市新莊區中榮街56巷2號2樓</p>
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
