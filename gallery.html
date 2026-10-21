@@ -6,16 +6,13 @@
     <title>展演舞台 | 采樂音樂教室 Aiko Music - 專屬你的閃耀時刻</title>
     <link rel="icon" href="images/favicon.png" type="image/png">
     <meta name="description" content="學習音樂最好的成果展現，就是勇敢站上舞台！采樂音樂教室定期舉辦年度師生音樂會與大提琴、小提琴合奏，陪伴學童與成人學員建立無可取代的自信與成就感。">
+    <link rel="canonical" href="https://aikomusic.github.io/gallery.html">
     <meta name="keywords" content="新莊音樂教室, 音樂會展演, 新莊大提琴發表, 新莊鋼琴發表, 音樂檢定, 采樂音樂">
     <meta name="geo.region" content="TW-NWT">
     <meta name="geo.placename" content="Xinzhuang District">
     <meta name="geo.position" content="25.0485;121.4485">
     <meta name="ICBM" content="25.0485, 121.4485">
 
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 
     <style>
         :root {
@@ -46,7 +43,7 @@
             justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.04);
             position: sticky; top: 0; z-index: 100;
         }
-        .logo img { height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
+        .logo img { width: auto; max-width: 100%; height: 90px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); }
         .piano-menu { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 5px; }
         .piano-key {
             background: rgba(255, 255, 255, 0.9); border: 1px solid #e0e0e0; border-bottom: 6px solid #d0d0d0;
@@ -79,7 +76,7 @@
             box-shadow: 0 15px 35px rgba(140, 123, 112, 0.12); border: 1px solid rgba(212, 163, 115, 0.2);
             margin-bottom: 60px; backdrop-filter: blur(5px);
         }
-        .article-box h3 { color: var(--warm-wood); font-size: 1.8rem; margin-bottom: 20px; }
+        .article-box h2, .article-box h3 { color: var(--warm-wood); font-size: 1.8rem; margin-bottom: 20px; }
         .article-box p { font-size: 1.15rem; line-height: 1.9; color: var(--text-main); margin-bottom: 15px; }
 
         .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-bottom: 40px; }
@@ -147,12 +144,17 @@
             .ai-chat-box { width: 90vw; right: 5vw; }
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室"></a>
+            <a href="index.html"><img src="images/aiko-music-logo.png" alt="采樂新莊音樂教室" width="500" height="500"></a>
         </div>
         <nav class="piano-menu">
             <a href="index.html" class="piano-key">首頁</a>
@@ -166,8 +168,11 @@
         </nav>
     </header>
 
+<main>
+
+
     <section class="page-hero">
-        <img src="images/gallery-hero-bg.webp" alt="采樂音樂展演舞台" class="page-hero-img">
+        <img src="images/gallery-hero-bg.webp" alt="采樂音樂展演舞台" class="page-hero-img" width="1478" height="1108">
         <div class="page-hero-overlay"></div>
         <div class="page-hero-content">
             <h1>展演舞台</h1>
@@ -177,7 +182,7 @@
 
     <section class="section-box">
         <div class="article-box">
-            <h3>✨ 給自己一個閃閃發光的理由</h3>
+            <h2>✨ 給自己一個閃閃發光的理由</h2>
             <p>在采樂，我們深信「上台演出」是學習音樂最棒的催化劑。<br>無論是學童還是成人，當聚光燈打在身上，深呼吸、指尖落下，那份克服緊張後獲得的掌聲，將化為受用一生的自信。</p>
             <p>從每年的<strong>「年度師生音樂會」</strong>、令人熱血沸騰的<strong>「弦樂大合奏」</strong>，到溫馨的琴房小成發。<br>這些影像紀錄的不只是音樂，更是大家在音樂路上蛻變的痕跡！點擊下方影片，感受屬於采樂的感動時刻吧！</p>
         </div>
@@ -188,64 +193,66 @@
         <div class="video-grid">
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1924208791436527%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1924208791436527%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 1" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F296642944955852%2F&show_text=false&width=380&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F296642944955852%2F&show_text=false&width=380&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 2" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1332848437704854%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1332848437704854%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 3" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F740136084645775%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F740136084645775%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 4" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1082972782448935%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1082972782448935%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 5" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1114918642555809%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1114918642555809%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 6" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=317&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F442538364738069%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=317&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F442538364738069%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 7" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
             <div class="video-card">
                 <div class="video-wrapper">
-                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1046803402919695%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                    <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2%2Fvideos%2F1046803402919695%2F&show_text=false&width=560&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室學生音樂演出影片 8" loading="lazy"></iframe>
                 </div>
                 <div class="video-desc">🎵 采樂精彩展演時刻</div>
             </div>
         </div>
-    </section>
+    </main>
+
+</section>
 
     <footer id="contact">
         <div class="footer-info">
-            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo"> 采樂音樂教室</h3>
+            <h3><img src="images/aiko-music-logo.png" alt="采樂Logo" class="footer-logo" width="500" height="500" loading="lazy" decoding="async"> 采樂音樂教室</h3>
             <p>📍 新北市新莊區中榮街56巷2號2樓</p>
             <p>☎ (02) 2996-7912</p>
             <p>✉ aikomusic2017@gmail.com</p>
         </div>
         <div class="footer-map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.4391424649148!2d121.44674917537695!3d25.05310087780389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a87e26eff161%3A0x64619720ffa07caf!2z6YeH5qiC6Z-z5qiC5pWZ5a6kIEFpa28gTXVzaWM!5e0!3m2!1szh-TW!2stw!4v1787284158810!5m2!1szh-TW!2stw" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="border:0;" title="采樂音樂教室 Google 地圖位置"></iframe>
         </div>
         <div class="footer-info">
             <h3 style="margin-bottom: 20px;">追蹤我們的日常</h3>
@@ -256,7 +263,7 @@
 
     <!-- ✨ AI 網頁練琴輔助工具 -->
     <div class="ai-floating-btn" id="aiBtn" title="呼叫 AI 音樂顧問">
-        <img src="images/ai-teacher.png" alt="AI 音樂老師">
+        <img src="images/ai-teacher.png" alt="AI 音樂老師" width="400" height="400" loading="lazy" decoding="async">
     </div>
     
     <div class="ai-chat-box" id="aiChatBox">
@@ -277,7 +284,7 @@
             <div class="chat-msg msg-ai">您好！我是采樂專屬的 AI 顧問。您可以點擊上方按鈕喚醒黑科技，或是直接輸入問題問我喔！</div>
         </div>
         <div class="ai-chat-input">
-            <input type="text" id="chatInput" placeholder="請輸入問題...">
+            <input type="text" id="chatInput" placeholder="請輸入問題..." aria-label="輸入問題">
             <button id="sendChat">發送</button>
         </div>
     </div>
