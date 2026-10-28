@@ -98,12 +98,31 @@
         }
         .btn-follow:hover { background-color: #7ab895; transform: scale(1.05); }
 
-        /* 📱 FB 嵌入專屬置中與美化外框 */
-        .fb-feed-container { display: flex; justify-content: center; margin: 60px 0; width: 100%; }
+        /* Facebook 動態牆：參照聯和刻記 blog.html 的 500px 官方 iframe 寬度配置 */
+        .fb-feed-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: 60px 0;
+        }
         .fb-wrapper {
-            background: white; padding: 25px; border-radius: 30px; width: 100%; max-width: 550px; 
-            box-shadow: 0 20px 40px rgba(144, 203, 170, 0.2); border: 4px dashed var(--light-green);
-            display: flex; justify-content: center; overflow: hidden; position: relative;
+            background: white;
+            border-radius: 20px;
+            padding: 20px 10px;
+            box-shadow: 0 20px 40px rgba(144, 203, 170, 0.2);
+            border: 1px solid rgba(144, 203, 170, 0.22);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: content-box;
+        }
+        .fb-wrapper iframe {
+            display: block;
+            width: 500px;
+            max-width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 12px;
         }
 
         /* ✨ AI 懸浮按鈕與對話框 */
@@ -210,24 +229,19 @@
             </div>
         </div>
 
-        <!-- Facebook 粉專最新公開貼文：官方 JavaScript SDK 版本 -->
+        <!-- Facebook 官方粉絲專頁 Timeline：參照聯和刻記 blog.html 的 500 × 800 iframe 結構 -->
         <div class="fb-feed-container">
             <div class="fb-wrapper">
-                <div id="fb-root"></div>
-                <div class="fb-page"
-                     data-href="https://www.facebook.com/aikomusic2"
-                     data-show-posts="true"
-                     data-width="500"
-                     data-height="750"
-                     data-small-header="false"
-                     data-adapt-container-width="true"
-                     data-hide-cover="false"
-                     data-show-facepile="false">
-                    <blockquote cite="https://www.facebook.com/aikomusic2" class="fb-xfbml-parse-ignore">
-                        <a href="https://www.facebook.com/aikomusic2" target="_blank" rel="noopener noreferrer">采樂音樂教室 Aiko Music</a>
-                    </blockquote>
-                </div>
-                <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&amp;version=v26.0"></script>
+                <iframe
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2&amp;tabs=timeline&amp;width=500&amp;height=800&amp;small_header=false&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=true&amp;appId"
+                    width="500"
+                    height="800"
+                    style="border:none;overflow:hidden"
+                    scrolling="no"
+                    frameborder="0"
+                    allowfullscreen="true"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+                </iframe>
             </div>
         </div>
 
