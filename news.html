@@ -98,22 +98,27 @@
         }
         .btn-follow:hover { background-color: #7ab895; transform: scale(1.05); }
 
-        /* 📱 FB 動態：桌機固定 500px，避免彈性排版使外掛變窄 */
+        /* 📱 FB 嵌入專屬置中與美化外框 */
         .fb-feed-container { display: flex; justify-content: center; margin: 60px 0; width: 100%; }
         .fb-wrapper {
-            background: white; padding: 20px 24px; border-radius: 30px;
-            width: 100%; max-width: 560px; box-sizing: border-box;
+            background: white; padding: 25px; border-radius: 30px; width: 100%; max-width: 550px; 
             box-shadow: 0 20px 40px rgba(144, 203, 170, 0.2); border: 4px dashed var(--light-green);
             display: flex; justify-content: center; overflow: hidden; position: relative;
         }
-        .fb-wrapper .fb-timeline-iframe {
-            display: block; width: 500px; min-width: 500px; max-width: none;
-            height: 1000px; flex: 0 0 500px; border: 0;
+        /* 僅固定 iframe 在 flex 容器中的寬度；原 Facebook src 與所有參數保持逐字不變。 */
+        .fb-wrapper > iframe {
+            display: block;
+            width: 500px;
+            min-width: 500px;
+            flex: 0 0 500px;
         }
+        /* 小螢幕保留原外掛的自適應設定，不修改或重載 iframe 網址。 */
         @media (max-width: 650px) {
-            .fb-wrapper { padding: 12px; }
-            .fb-wrapper .fb-timeline-iframe {
-                min-width: 0; max-width: 100%; flex-shrink: 1;
+            .fb-wrapper > iframe {
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+                flex: 0 1 100%;
             }
         }
 
@@ -225,36 +230,9 @@
         <div class="fb-feed-container">
             <div class="fb-wrapper">
                 <!-- Facebook 官方粉絲專頁嵌入代碼，寬度官方最大限制為 500px，高度拉長至 1000px 以符合大版面需求 -->
-                <iframe class="fb-timeline-iframe" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2&amp;tabs=timeline&amp;width=500&amp;height=1000&amp;small_header=false&amp;adapt_container_width=false&amp;hide_cover=false&amp;show_facepile=true&amp;appId" width="500" height="1000" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" title="采樂音樂教室 Facebook 最新動態"></iframe>
+                <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Faikomusic2&tabs=timeline&width=500&height=1000&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="500" height="1000" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             </div>
         </div>
-    <script>
-        // 只調整 Facebook 外掛寬度：避免容器縮排後只呈現窄版貼文。
-        (function () {
-            const frame = document.querySelector('.fb-timeline-iframe');
-            if (!frame) return;
-            const wrapper = frame.parentElement;
-            function updateFacebookWidth() {
-                const style = window.getComputedStyle(wrapper);
-                const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-                const available = Math.floor(wrapper.clientWidth - padding);
-                const width = Math.max(180, Math.min(500, available));
-                if (frame.getAttribute('width') === String(width)) return;
-                frame.setAttribute('width', String(width));
-                frame.style.width = width + 'px';
-                frame.style.flexBasis = width + 'px';
-                const url = new URL(frame.src);
-                url.searchParams.set('width', String(width));
-                frame.src = url.toString();
-            }
-            updateFacebookWidth();
-            if (window.ResizeObserver) {
-                new ResizeObserver(updateFacebookWidth).observe(wrapper);
-            } else {
-                window.addEventListener('resize', updateFacebookWidth);
-            }
-        }());
-    </script>
 
         <!-- 下方活潑生動的裝飾卡片 (反向排版) -->
         <div class="decor-card reverse">
