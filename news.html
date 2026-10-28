@@ -105,22 +105,6 @@
             box-shadow: 0 20px 40px rgba(144, 203, 170, 0.2); border: 4px dashed var(--light-green);
             display: flex; justify-content: center; overflow: hidden; position: relative;
         }
-        /* 僅固定 iframe 在 flex 容器中的寬度；原 Facebook src 與所有參數保持逐字不變。 */
-        .fb-wrapper > iframe {
-            display: block;
-            width: 500px;
-            min-width: 500px;
-            flex: 0 0 500px;
-        }
-        /* 小螢幕保留原外掛的自適應設定，不修改或重載 iframe 網址。 */
-        @media (max-width: 650px) {
-            .fb-wrapper > iframe {
-                width: 100%;
-                min-width: 0;
-                max-width: 100%;
-                flex: 0 1 100%;
-            }
-        }
 
         /* ✨ AI 懸浮按鈕與對話框 */
         .ai-floating-btn { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 65px; height: 65px; background: var(--primary-green); border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 2px solid white; overflow: hidden; }
