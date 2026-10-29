@@ -106,27 +106,6 @@
             display: flex; justify-content: center; overflow: hidden; position: relative;
         }
 
-        /* 僅視覺放大 Facebook 已渲染內容，不改 iframe 的實際布局尺寸、URL 或載入時機。
-           CSS transform 不改變 iframe 的 layout viewport；若 Meta 僅回傳窄版動態，畫面可等比例放大。
-           本效果不保證 Meta 一定提供貼文，亦不會增加載入請求。 */
-        @media (min-width: 651px) {
-            .fb-wrapper > iframe {
-                transform: scale(1.85);
-                transform-origin: center top;
-            }
-        }
-        @media (max-width: 650px) {
-            .fb-wrapper {
-                box-sizing: border-box;
-                max-width: 100%;
-                padding: 16px 12px;
-            }
-            .fb-wrapper > iframe {
-                transform: scale(1.18);
-                transform-origin: center top;
-            }
-        }
-
         /* ✨ AI 懸浮按鈕與對話框 */
         .ai-floating-btn { position: fixed; bottom: 30px; right: 30px; z-index: 999; width: 65px; height: 65px; background: var(--primary-green); border-radius: 50%; box-shadow: 0 5px 15px rgba(144, 203, 170, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 2px solid white; overflow: hidden; }
         .ai-floating-btn img { width: 100%; height: 100%; object-fit: cover; }
